@@ -1,0 +1,414 @@
+fileFormatVersion: 2
+guid: 336fcada41f6ea8418f45537d0512c58
+timeCreated: 1521405917
+licenseType: Store
+ModelImporter:
+  serializedVersion: 21
+  fileIDToRecycleName:
+    100000: //RootNode
+    100002: alfil_b
+    100004: alfil_b01
+    100006: alfil_n
+    100008: alfil_n01
+    100010: caballo_b
+    100012: caballo_b01
+    100014: caballo_n
+    100016: caballo_n01
+    100018: peon_b
+    100020: peon_b01
+    100022: peon_b02
+    100024: peon_b03
+    100026: peon_b04
+    100028: peon_b05
+    100030: peon_b06
+    100032: peon_b07
+    100034: peon_n
+    100036: peon_n01
+    100038: peon_n02
+    100040: peon_n03
+    100042: peon_n04
+    100044: peon_n05
+    100046: peon_n06
+    100048: peon_n07
+    100050: reina_b
+    100052: reina_n
+    100054: rey_b
+    100056: rey_n
+    100058: tablero
+    100060: torre_b
+    100062: torre_b01
+    100064: torre_n
+    100066: torre_n01
+    100068: bishop_black
+    100070: bishop_black 1
+    100072: bishop_white
+    100074: bishop_white 1
+    100076: board
+    100078: king_black
+    100080: king_white
+    100082: knight_black
+    100084: knight_black 1
+    100086: knight_white
+    100088: knight_white 1
+    100090: pawn_black
+    100092: pawn_black 1
+    100094: pawn_black 2
+    100096: pawn_black 3
+    100098: pawn_black 4
+    100100: pawn_black 5
+    100102: pawn_black 6
+    100104: pawn_black 7
+    100106: pawn_white
+    100108: pawn_white 1
+    100110: pawn_white 2
+    100112: pawn_white 3
+    100114: pawn_white 4
+    100116: pawn_white 5
+    100118: pawn_white 6
+    100120: pawn_white 7
+    100122: queen_black
+    100124: queen_white
+    100126: rook_black
+    100128: rook_black 1
+    100130: rook_white
+    100132: rook_white 1
+    400000: //RootNode
+    400002: alfil_b
+    400004: alfil_b01
+    400006: alfil_n
+    400008: alfil_n01
+    400010: caballo_b
+    400012: caballo_b01
+    400014: caballo_n
+    400016: caballo_n01
+    400018: peon_b
+    400020: peon_b01
+    400022: peon_b02
+    400024: peon_b03
+    400026: peon_b04
+    400028: peon_b05
+    400030: peon_b06
+    400032: peon_b07
+    400034: peon_n
+    400036: peon_n01
+    400038: peon_n02
+    400040: peon_n03
+    400042: peon_n04
+    400044: peon_n05
+    400046: peon_n06
+    400048: peon_n07
+    400050: reina_b
+    400052: reina_n
+    400054: rey_b
+    400056: rey_n
+    400058: tablero
+    400060: torre_b
+    400062: torre_b01
+    400064: torre_n
+    400066: torre_n01
+    400068: bishop_black
+    400070: bishop_black 1
+    400072: bishop_white
+    400074: bishop_white 1
+    400076: board
+    400078: king_black
+    400080: king_white
+    400082: knight_black
+    400084: knight_black 1
+    400086: knight_white
+    400088: knight_white 1
+    400090: pawn_black
+    400092: pawn_black 1
+    400094: pawn_black 2
+    400096: pawn_black 3
+    400098: pawn_black 4
+    400100: pawn_black 5
+    400102: pawn_black 6
+    400104: pawn_black 7
+    400106: pawn_white
+    400108: pawn_white 1
+    400110: pawn_white 2
+    400112: pawn_white 3
+    400114: pawn_white 4
+    400116: pawn_white 5
+    400118: pawn_white 6
+    400120: pawn_white 7
+    400122: queen_black
+    400124: queen_white
+    400126: rook_black
+    400128: rook_black 1
+    400130: rook_white
+    400132: rook_white 1
+    2300000: alfil_b
+    2300002: alfil_b01
+    2300004: alfil_n
+    2300006: alfil_n01
+    2300008: caballo_b
+    2300010: caballo_b01
+    2300012: caballo_n
+    2300014: caballo_n01
+    2300016: peon_b
+    2300018: peon_b01
+    2300020: peon_b02
+    2300022: peon_b03
+    2300024: peon_b04
+    2300026: peon_b05
+    2300028: peon_b06
+    2300030: peon_b07
+    2300032: peon_n
+    2300034: peon_n01
+    2300036: peon_n02
+    2300038: peon_n03
+    2300040: peon_n04
+    2300042: peon_n05
+    2300044: peon_n06
+    2300046: peon_n07
+    2300048: reina_b
+    2300050: reina_n
+    2300052: rey_b
+    2300054: rey_n
+    2300056: tablero
+    2300058: torre_b
+    2300060: torre_b01
+    2300062: torre_n
+    2300064: torre_n01
+    2300066: bishop_black
+    2300068: bishop_black 1
+    2300070: bishop_white
+    2300072: bishop_white 1
+    2300074: board
+    2300076: king_black
+    2300078: king_white
+    2300080: knight_black
+    2300082: knight_black 1
+    2300084: knight_white
+    2300086: knight_white 1
+    2300088: pawn_black
+    2300090: pawn_black 1
+    2300092: pawn_black 2
+    2300094: pawn_black 3
+    2300096: pawn_black 4
+    2300098: pawn_black 5
+    2300100: pawn_black 6
+    2300102: pawn_black 7
+    2300104: pawn_white
+    2300106: pawn_white 1
+    2300108: pawn_white 2
+    2300110: pawn_white 3
+    2300112: pawn_white 4
+    2300114: pawn_white 5
+    2300116: pawn_white 6
+    2300118: pawn_white 7
+    2300120: queen_black
+    2300122: queen_white
+    2300124: rook_black
+    2300126: rook_black 1
+    2300128: rook_white
+    2300130: rook_white 1
+    3300000: alfil_b
+    3300002: alfil_b01
+    3300004: alfil_n
+    3300006: alfil_n01
+    3300008: caballo_b
+    3300010: caballo_b01
+    3300012: caballo_n
+    3300014: caballo_n01
+    3300016: peon_b
+    3300018: peon_b01
+    3300020: peon_b02
+    3300022: peon_b03
+    3300024: peon_b04
+    3300026: peon_b05
+    3300028: peon_b06
+    3300030: peon_b07
+    3300032: peon_n
+    3300034: peon_n01
+    3300036: peon_n02
+    3300038: peon_n03
+    3300040: peon_n04
+    3300042: peon_n05
+    3300044: peon_n06
+    3300046: peon_n07
+    3300048: reina_b
+    3300050: reina_n
+    3300052: rey_b
+    3300054: rey_n
+    3300056: tablero
+    3300058: torre_b
+    3300060: torre_b01
+    3300062: torre_n
+    3300064: torre_n01
+    3300066: bishop_black
+    3300068: bishop_black 1
+    3300070: bishop_white
+    3300072: bishop_white 1
+    3300074: board
+    3300076: king_black
+    3300078: king_white
+    3300080: knight_black
+    3300082: knight_black 1
+    3300084: knight_white
+    3300086: knight_white 1
+    3300088: pawn_black
+    3300090: pawn_black 1
+    3300092: pawn_black 2
+    3300094: pawn_black 3
+    3300096: pawn_black 4
+    3300098: pawn_black 5
+    3300100: pawn_black 6
+    3300102: pawn_black 7
+    3300104: pawn_white
+    3300106: pawn_white 1
+    3300108: pawn_white 2
+    3300110: pawn_white 3
+    3300112: pawn_white 4
+    3300114: pawn_white 5
+    3300116: pawn_white 6
+    3300118: pawn_white 7
+    3300120: queen_black
+    3300122: queen_white
+    3300124: rook_black
+    3300126: rook_black 1
+    3300128: rook_white
+    3300130: rook_white 1
+    4300000: tablero
+    4300002: reina_b
+    4300004: rey_b
+    4300006: alfil_b
+    4300008: caballo_b
+    4300010: torre_b
+    4300012: peon_b
+    4300014: caballo_n
+    4300016: reina_n
+    4300018: rey_n
+    4300020: peon_n
+    4300022: alfil_n
+    4300024: torre_n
+    4300026: peon_n01
+    4300028: peon_n02
+    4300030: peon_n03
+    4300032: peon_n04
+    4300034: peon_n05
+    4300036: peon_n06
+    4300038: peon_n07
+    4300040: alfil_b01
+    4300042: torre_b01
+    4300044: caballo_b01
+    4300046: peon_b01
+    4300048: peon_b02
+    4300050: peon_b03
+    4300052: peon_b04
+    4300054: peon_b05
+    4300056: peon_b06
+    4300058: peon_b07
+    4300060: torre_n01
+    4300062: caballo_n01
+    4300064: alfil_n01
+    4300066: board
+    4300068: queen_white
+    4300070: king_white
+    4300072: bishop_white
+    4300074: knight_white
+    4300076: rook_white
+    4300078: pawn_white
+    4300080: knight_black
+    4300082: queen_black
+    4300084: king_black
+    4300086: pawn_black
+    4300088: bishop_black
+    4300090: rook_black
+    4300092: pawn_black
+    4300094: pawn_black
+    4300096: pawn_black
+    4300098: pawn_black
+    4300100: pawn_black
+    4300102: pawn_black
+    4300104: pawn_black
+    4300106: bishop_white
+    4300108: rook_white
+    4300110: knight_white
+    4300112: pawn_white
+    4300114: pawn_white
+    4300116: pawn_white
+    4300118: pawn_white
+    4300120: pawn_white
+    4300122: pawn_white
+    4300124: pawn_white
+    4300126: rook_black
+    4300128: knight_black
+    4300130: bishop_black
+  materials:
+    importMaterials: 0
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
