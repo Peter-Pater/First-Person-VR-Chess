@@ -26,6 +26,25 @@ namespace Valve.VR.Extras
 
         Transform previousContact = null;
 
+        // player movement speed
+        public float transperspective_speed = 3;
+        public float move_speed = 1;
+
+        // control states
+        const int POINTER_IN = 1;
+        const int POINTER_OUT = 2;
+        const int POINTER_CLICK = 3;
+
+        // global states
+        const int PLAYER_ONE_SELECT = 1;
+        const int PLAYER_ONE_MOVE = 2;
+        const int PLAYER_ONE_TRANSPERSPECTIVE = 3;
+        const int OPPONENT_MOVES = 4;
+
+        GameObject current_piece;
+        GameObject player;
+        GameObject target_piece;
+        StateMachine stateMachine;
 
         private void Start()
         {
@@ -36,7 +55,12 @@ namespace Valve.VR.Extras
             
             if (interactWithUI == null)
                 Debug.LogError("No ui interaction action has been set on this component.");
-            
+
+            current_piece = GameObject.Find("king_white");
+            target_piece = current_piece;
+            player = GameObject.Find("Player");
+            current_piece.GetComponent<MeshRenderer>().enabled = false;
+            stateMachine = player.GetComponent<StateMachine>();
 
             holder = new GameObject();
             holder.transform.parent = this.transform;
@@ -73,7 +97,9 @@ namespace Valve.VR.Extras
         public virtual void OnPointerIn(PointerEventArgs e)
         {
             if (PointerIn != null)
+            {
                 PointerIn(this, e);
+            }
         }
 
         public virtual void OnPointerClick(PointerEventArgs e)
@@ -103,6 +129,8 @@ namespace Valve.VR.Extras
             RaycastHit hit;
             bool bHit = Physics.Raycast(raycast, out hit);
 
+
+            // Pointer out
             if (previousContact && previousContact != hit.transform)
             {
                 PointerEventArgs args = new PointerEventArgs();
@@ -112,7 +140,10 @@ namespace Valve.VR.Extras
                 args.target = previousContact;
                 OnPointerOut(args);
                 previousContact = null;
+                LaserEventHandler(args, POINTER_OUT);
             }
+
+            // Pointer in
             if (bHit && previousContact != hit.transform)
             {
                 PointerEventArgs argsIn = new PointerEventArgs();
@@ -121,17 +152,25 @@ namespace Valve.VR.Extras
                 argsIn.flags = 0;
                 argsIn.target = hit.transform;
                 OnPointerIn(argsIn);
+                Debug.Log("Current: " + hit.transform.name);
+                //Debug.Log("Previous: " + previousContact.name);
                 previousContact = hit.transform;
+                LaserEventHandler(argsIn, POINTER_IN);
             }
+
+
             if (!bHit)
             {
                 previousContact = null;
             }
+
+
             if (bHit && hit.distance < 100f)
             {
                 dist = hit.distance;
             }
 
+            // Pointer click
             if (bHit && interactWithUI.GetStateUp(pose.inputSource))
             {
                 PointerEventArgs argsClick = new PointerEventArgs();
@@ -140,6 +179,7 @@ namespace Valve.VR.Extras
                 argsClick.flags = 0;
                 argsClick.target = hit.transform;
                 OnPointerClick(argsClick);
+                LaserEventHandler(argsClick, POINTER_CLICK);
             }
 
             if (interactWithUI != null && interactWithUI.GetState(pose.inputSource))
@@ -153,6 +193,51 @@ namespace Valve.VR.Extras
                 pointer.GetComponent<MeshRenderer>().material.color = color;
             }
             pointer.transform.localPosition = new Vector3(0f, 0f, dist / 2f);
+
+            PerspectiveHandler();
+        }
+
+        public void LaserEventHandler(PointerEventArgs element, int control_state)
+        {
+            PieceBehavior piecebehavior = element.target.gameObject.GetComponent<PieceBehavior>();
+
+            if (piecebehavior && element.target.gameObject != current_piece)
+            {
+                // TO DO: PLAYER_ONE_MOVE SHOULD NOT BE HERE!
+                if (stateMachine.STATE == PLAYER_ONE_MOVE || stateMachine.STATE == PLAYER_ONE_SELECT)
+                {
+                    piecebehavior.control_state = control_state;
+                    if (control_state == POINTER_CLICK)
+                    {
+                        target_piece = element.target.gameObject;
+                    }
+                }
+            }
+        }
+
+        public void PerspectiveHandler()
+        {
+            // TO DO: RECONSIDER THIS STATE
+            if (stateMachine.STATE != PLAYER_ONE_TRANSPERSPECTIVE)
+            {
+                player.transform.position = current_piece.transform.position + Vector3.up;
+            }
+            else
+            {
+                if (player.transform.position != target_piece.transform.position + Vector3.up)
+                {
+                    player.transform.position = Vector3.MoveTowards(player.transform.position, target_piece.transform.position + Vector3.up, transperspective_speed * Time.deltaTime);
+                }
+                else
+                {
+                    Debug.Log("Transperspective complete!");
+                    //stateMachine.STATE = PLAYER_ONE_MOVE;
+                    stateMachine.STATE = PLAYER_ONE_SELECT;
+                    current_piece.GetComponent<MeshRenderer>().enabled = true;
+                    current_piece.GetComponent<Collider>().enabled = true;
+                    current_piece = target_piece;
+                }
+            }
         }
     }
 
