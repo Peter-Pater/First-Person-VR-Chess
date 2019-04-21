@@ -29,6 +29,8 @@ public class PieceBehavior : MonoBehaviour
     const int PLAYER_ONE_TRANSPERSPECTIVE = 3;
     const int OPPONENT_MOVES = 4;
 
+    GameObject chessManager;
+
     void Start()
     {
         control_state = POINTER_OUT;
@@ -36,6 +38,8 @@ public class PieceBehavior : MonoBehaviour
         float_pos = this.transform.position + Vector3.up / 5;
 
         stateMachine = GameObject.Find("Player").GetComponent<StateMachine>();
+
+        chessManager = GameObject.Find("ChessManager");
     }
 
     // Update is called once per frame

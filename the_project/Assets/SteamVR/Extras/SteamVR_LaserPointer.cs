@@ -46,6 +46,8 @@ namespace Valve.VR.Extras
         GameObject target_piece;
         StateMachine stateMachine;
 
+        BoardManager boardManager;
+
         private void Start()
         {
             if (pose == null)
