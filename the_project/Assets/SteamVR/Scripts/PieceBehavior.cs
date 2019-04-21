@@ -55,7 +55,7 @@ public class PieceBehavior : MonoBehaviour
                 }
                 else
                 {
-                    Debug.Log("Float complete!");
+                    //Debug.Log("Float complete!");
                 }
                 break;
             case POINTER_OUT:
@@ -65,7 +65,7 @@ public class PieceBehavior : MonoBehaviour
                 }
                 else
                 {
-                    Debug.Log("Drop complete!");
+                    //Debug.Log("Drop complete!");
                 }
                 break;
             case POINTER_CLICK:
