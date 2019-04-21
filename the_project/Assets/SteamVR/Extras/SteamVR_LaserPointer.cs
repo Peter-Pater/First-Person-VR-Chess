@@ -218,24 +218,31 @@ namespace Valve.VR.Extras
         public void PerspectiveHandler()
         {
             // TO DO: RECONSIDER THIS STATE
-            if (stateMachine.STATE != PLAYER_ONE_TRANSPERSPECTIVE)
+            if (stateMachine.STATE != PLAYER_ONE_TRANSPERSPECTIVE && stateMachine.STATE != PLAYER_ONE_MOVE)
             {
                 player.transform.position = current_piece.transform.position + Vector3.up;
             }
             else
             {
-                if (player.transform.position != target_piece.transform.position + Vector3.up)
+                if (stateMachine.STATE == PLAYER_ONE_TRANSPERSPECTIVE)
                 {
-                    player.transform.position = Vector3.MoveTowards(player.transform.position, target_piece.transform.position + Vector3.up, transperspective_speed * Time.deltaTime);
+                    if (player.transform.position != target_piece.transform.position + Vector3.up)
+                    {
+                        player.transform.position = Vector3.MoveTowards(player.transform.position, target_piece.transform.position + Vector3.up, transperspective_speed * Time.deltaTime);
+                    }
+                    else
+                    {
+                        Debug.Log("Transperspective complete!");
+                        stateMachine.STATE = PLAYER_ONE_MOVE;
+                        //stateMachine.STATE = PLAYER_ONE_SELECT;
+                        current_piece.GetComponent<MeshRenderer>().enabled = true;
+                        current_piece.GetComponent<Collider>().enabled = true;
+                        current_piece = target_piece;
+                    }
                 }
-                else
+                if (stateMachine.STATE == PLAYER_ONE_MOVE)
                 {
-                    Debug.Log("Transperspective complete!");
-                    //stateMachine.STATE = PLAYER_ONE_MOVE;
-                    stateMachine.STATE = PLAYER_ONE_SELECT;
-                    current_piece.GetComponent<MeshRenderer>().enabled = true;
-                    current_piece.GetComponent<Collider>().enabled = true;
-                    current_piece = target_piece;
+
                 }
             }
         }
