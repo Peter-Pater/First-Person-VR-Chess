@@ -16,8 +16,8 @@ public class PieceBehavior : MonoBehaviour
 
     public int control_state;
 
-    Vector3 original_pos;
-    Vector3 float_pos;
+    public Vector3 original_pos;
+    public Vector3 float_pos;
 
 
     // piece movement
@@ -78,8 +78,8 @@ public class PieceBehavior : MonoBehaviour
             case POINTER_CLICK:
                 if (stateMachine.STATE == PLAYER_ONE_SELECT)
                 {
-                    this.GetComponent<MeshRenderer>().enabled = false;
-                    this.GetComponent<Collider>().enabled = false;
+                    //this.GetComponent<MeshRenderer>().enabled = false;
+                    //this.GetComponent<Collider>().enabled = false;
                     stateMachine.STATE = PLAYER_ONE_TRANSPERSPECTIVE;
                     control_state = POINTER_OUT;
                 }
