@@ -55,8 +55,10 @@ public class BoardManager : MonoBehaviour {
 
     //events
 
-    public void onClick(int x, int y) {
+    public void makeMove(int x, int y) {
         Position clickPosition = new Position(x, y);
+
+        Debug.Log("Clicked!");
 
         if (isPlayerTurn) {
             if (selectedTile == null) {
@@ -129,7 +131,7 @@ public class BoardManager : MonoBehaviour {
 
     private void getScreenInfo() {
         tileWidth = (float) tile.GetComponent<Renderer>().bounds.size.x;
-        screenCenter = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width / 2, Screen.height / 2, 10));
+        screenCenter = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width / 2, 0, 10));
         boardTopLeft = screenCenter + new Vector3(-this.width / 2 * tileWidth, (float)((this.height / 2) -.5) * tileWidth);
     }
 

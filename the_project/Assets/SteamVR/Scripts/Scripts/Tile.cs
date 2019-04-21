@@ -22,7 +22,7 @@ public class Tile : MonoBehaviour {
     }
 
     void OnMouseDown() {
-        boardManager.onClick(x, y);
+        //boardManager.onClick(x, y);
     }
 
     public void setAsOption() {

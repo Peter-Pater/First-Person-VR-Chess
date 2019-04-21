@@ -64,6 +64,8 @@ namespace Valve.VR.Extras
             current_piece.GetComponent<MeshRenderer>().enabled = false;
             stateMachine = player.GetComponent<StateMachine>();
 
+            boardManager = GameObject.Find("ChessManager").GetComponent<BoardManager>();
+
             holder = new GameObject();
             holder.transform.parent = this.transform;
             holder.transform.localPosition = Vector3.zero;
@@ -182,6 +184,7 @@ namespace Valve.VR.Extras
                 argsClick.target = hit.transform;
                 OnPointerClick(argsClick);
                 LaserEventHandler(argsClick, POINTER_CLICK);
+                boardManager.makeMove(1, 1);
             }
 
             if (interactWithUI != null && interactWithUI.GetState(pose.inputSource))
