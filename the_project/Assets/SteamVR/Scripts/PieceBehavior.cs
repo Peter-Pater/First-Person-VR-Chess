@@ -6,6 +6,8 @@ public class PieceBehavior : MonoBehaviour
 {
     // Start is called before the first frame update
     public string piece_identity;
+    public int x;
+    public int y;
 
     // control states
     const int POINTER_IN = 1;
@@ -27,9 +29,10 @@ public class PieceBehavior : MonoBehaviour
     const int PLAYER_ONE_SELECT = 1;
     const int PLAYER_ONE_MOVE = 2;
     const int PLAYER_ONE_TRANSPERSPECTIVE = 3;
-    const int OPPONENT_MOVES = 4;
+    const int PLAYER_ONE_TRANSPERSPECTIVE_1 = 4;
+    const int OPPONENT_MOVES = 5;
 
-    GameObject chessManager;
+    BoardManager boardManager;
 
     void Start()
     {
@@ -39,7 +42,7 @@ public class PieceBehavior : MonoBehaviour
 
         stateMachine = GameObject.Find("Player").GetComponent<StateMachine>();
 
-        chessManager = GameObject.Find("ChessManager");
+        boardManager = GameObject.Find("ChessManager").GetComponent<BoardManager>();
     }
 
     // Update is called once per frame

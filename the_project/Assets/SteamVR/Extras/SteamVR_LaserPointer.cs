@@ -35,21 +35,29 @@ namespace Valve.VR.Extras
         const int POINTER_OUT = 2;
         const int POINTER_CLICK = 3;
 
+        int control_state = 0;
+
         // global states
         const int PLAYER_ONE_SELECT = 1;
         const int PLAYER_ONE_MOVE = 2;
         const int PLAYER_ONE_TRANSPERSPECTIVE = 3;
-        const int OPPONENT_MOVES = 4;
+        const int PLAYER_ONE_TRANSPERSPECTIVE_1 = 4;
+        const int OPPONENT_MOVES = 5;
 
         GameObject current_piece;
+        PieceBehavior current_piece_script;
+
         GameObject player;
         GameObject target_piece;
+        GameObject target_tile;
         StateMachine stateMachine;
 
         BoardManager boardManager;
 
         private void Start()
         {
+            boardManager = GameObject.Find("ChessManager").GetComponent<BoardManager>();
+
             if (pose == null)
                 pose = this.GetComponent<SteamVR_Behaviour_Pose>();
             if (pose == null)
@@ -59,12 +67,12 @@ namespace Valve.VR.Extras
                 Debug.LogError("No ui interaction action has been set on this component.");
 
             current_piece = GameObject.Find("king_white");
+            current_piece_script = current_piece.GetComponent<PieceBehavior>();
+
             target_piece = current_piece;
             player = GameObject.Find("Player");
             current_piece.GetComponent<MeshRenderer>().enabled = false;
             stateMachine = player.GetComponent<StateMachine>();
-
-            boardManager = GameObject.Find("ChessManager").GetComponent<BoardManager>();
 
             holder = new GameObject();
             holder.transform.parent = this.transform;
@@ -145,6 +153,7 @@ namespace Valve.VR.Extras
                 OnPointerOut(args);
                 previousContact = null;
                 LaserEventHandler(args, POINTER_OUT);
+                control_state = POINTER_OUT;
             }
 
             // Pointer in
@@ -160,6 +169,7 @@ namespace Valve.VR.Extras
                 //Debug.Log("Previous: " + previousContact.name);
                 previousContact = hit.transform;
                 LaserEventHandler(argsIn, POINTER_IN);
+                control_state = POINTER_IN;
             }
 
 
@@ -184,7 +194,7 @@ namespace Valve.VR.Extras
                 argsClick.target = hit.transform;
                 OnPointerClick(argsClick);
                 LaserEventHandler(argsClick, POINTER_CLICK);
-                boardManager.makeMove(1, 1);
+                control_state = POINTER_CLICK;
             }
 
             if (interactWithUI != null && interactWithUI.GetState(pose.inputSource))
@@ -200,22 +210,29 @@ namespace Valve.VR.Extras
             pointer.transform.localPosition = new Vector3(0f, 0f, dist / 2f);
 
             PerspectiveHandler();
+
+            control_state = 0;
         }
 
         public void LaserEventHandler(PointerEventArgs element, int control_state)
         {
             PieceBehavior piecebehavior = element.target.gameObject.GetComponent<PieceBehavior>();
-
             if (piecebehavior && element.target.gameObject != current_piece)
             {
-                // TO DO: PLAYER_ONE_MOVE SHOULD NOT BE HERE!
-                if (stateMachine.STATE == PLAYER_ONE_MOVE || stateMachine.STATE == PLAYER_ONE_SELECT)
+                if (stateMachine.STATE == PLAYER_ONE_SELECT)
                 {
                     piecebehavior.control_state = control_state;
                     if (control_state == POINTER_CLICK)
                     {
                         target_piece = element.target.gameObject;
                     }
+                }
+            }
+            else
+            {
+                if (stateMachine.STATE == PLAYER_ONE_MOVE && control_state == POINTER_CLICK)
+                {
+                    target_tile = element.target.gameObject;
                 }
             }
         }
@@ -243,15 +260,53 @@ namespace Valve.VR.Extras
                         current_piece.GetComponent<MeshRenderer>().enabled = true;
                         current_piece.GetComponent<Collider>().enabled = true;
                         current_piece = target_piece;
+                        // highlight possible moves
+                        current_piece_script = current_piece.GetComponent<PieceBehavior>();
+                        boardManager.makeMove(current_piece_script.x, current_piece_script.y);
+
+                        foreach (Position pos in boardManager.possibleMovePositions)
+                        {
+                            string tileName = GetTileName(pos.x, pos.y);
+                            Material mat = Resources.Load("Floor1", typeof(Material)) as Material;
+                            GameObject.Find(tileName).GetComponent<MeshRenderer>().materials[0] = mat;
+                        }
                     }
                 }
                 if (stateMachine.STATE == PLAYER_ONE_MOVE)
                 {
-
+                    if (control_state == POINTER_CLICK)
+                    {
+                        stateMachine.STATE = PLAYER_ONE_TRANSPERSPECTIVE_1;
+                    }
+                }
+                if (stateMachine.STATE == PLAYER_ONE_TRANSPERSPECTIVE_1)
+                {
+                    Vector3 target_pos = new Vector3(target_tile.transform.position.x,
+                                                       target_tile.transform.position.y,
+                                                       current_piece.transform.position.z);
+                    if (player.transform.position != target_pos)
+                    {
+                        player.transform.position = Vector3.MoveTowards(player.transform.position,
+                                                                    target_pos,
+                                                                    transperspective_speed * Time.deltaTime);
+                    }
+                    else
+                    {
+                        stateMachine.STATE = PLAYER_ONE_SELECT;
+                        // TO DO: change state for AI, mark this movement
+                    }
                 }
             }
         }
+
+        public string GetTileName(int x, int y)
+        {
+            string[] name_x = { "H", "G", "F", "E", "D", "C", "B", "A" };
+            string[] name_y = { "1", "2", "3", "4", "5", "6", "7", "8" };
+            return name_x[x] + name_y[y];
+        }
     }
+
 
     public struct PointerEventArgs
     {
