@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.12731749, g: 0.13414757, b: 0.1210787, a: 1}
+  m_IndirectSpecularColor: {r: 0.12731704, g: 0.13414726, b: 0.1210787, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &4
 LightmapSettings:
@@ -11133,6 +11133,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   piece_identity: 
+  x: 7
+  y: 0
   control_state: 0
   movement_speed: 1
 --- !u!64 &106292562
@@ -22727,6 +22729,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   piece_identity: 
+  x: 5
+  y: 0
   control_state: 0
   movement_speed: 1
 --- !u!64 &254420441
@@ -31391,6 +31395,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   piece_identity: 
+  x: 0
+  y: 1
   control_state: 0
   movement_speed: 1
 --- !u!64 &453880556
@@ -32268,6 +32274,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   piece_identity: 
+  x: 3
+  y: 0
   control_state: 0
   movement_speed: 1
 --- !u!64 &500263479
@@ -46014,6 +46022,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   piece_identity: 
+  x: 6
+  y: 0
   control_state: 0
   movement_speed: 1
 --- !u!64 &711808615
@@ -46257,6 +46267,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   piece_identity: 
+  x: 2
+  y: 0
   control_state: 0
   movement_speed: 1
 --- !u!64 &716244046
@@ -48665,6 +48677,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   piece_identity: 
+  x: 7
+  y: 1
   control_state: 0
   movement_speed: 1
 --- !u!64 &871127154
@@ -55244,6 +55258,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   piece_identity: 
+  x: 4
+  y: 1
   control_state: 0
   movement_speed: 1
 --- !u!64 &976602364
@@ -55852,6 +55868,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   piece_identity: 
+  x: 1
+  y: 1
   control_state: 0
   movement_speed: 0.5
 --- !u!4 &999600272 stripped
@@ -65744,6 +65762,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   piece_identity: 
+  x: 0
+  y: 0
   control_state: 0
   movement_speed: 1
 --- !u!64 &1043558563
@@ -86399,6 +86419,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   piece_identity: 
+  x: 2
+  y: 1
   control_state: 0
   movement_speed: 1
 --- !u!64 &1155772908
@@ -88205,6 +88227,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   piece_identity: 
+  x: 5
+  y: 1
   control_state: 0
   movement_speed: 1
 --- !u!64 &1282811450
@@ -89552,6 +89576,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   piece_identity: 
+  x: 3
+  y: 1
   control_state: 0
   movement_speed: 1
 --- !u!64 &1371314965
@@ -119320,6 +119346,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   piece_identity: 
+  x: 4
+  y: 0
   control_state: 0
   movement_speed: 1
 --- !u!64 &1766949078
@@ -122575,6 +122603,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 107946, guid: dc06161b6d97feb419f45f03b62e14b9, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 160596, guid: dc06161b6d97feb419f45f03b62e14b9, type: 3}
       propertyPath: m_Layer
       value: 2
@@ -123010,6 +123042,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   piece_identity: 
+  x: 6
+  y: 1
   control_state: 0
   movement_speed: 1
 --- !u!64 &1927777168
@@ -129930,6 +129964,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   piece_identity: 
+  x: 1
+  y: 0
   control_state: 0
   movement_speed: 1
 --- !u!64 &2032264531
