@@ -27,7 +27,7 @@ namespace Valve.VR.Extras
         Transform previousContact = null;
 
         // player movement speed
-        public float transperspective_speed = 3;
+        public float transperspective_speed = 6;
         public float move_speed = 1;
 
         // control states
@@ -253,7 +253,8 @@ namespace Valve.VR.Extras
                 {
                     if (player.transform.position != target_piece.transform.position + Vector3.up)
                     {
-                        player.transform.position = Vector3.MoveTowards(player.transform.position, target_piece.transform.position + Vector3.up, transperspective_speed * Time.deltaTime);
+                        //player.transform.position = Vector3.MoveTowards(player.transform.position, target_piece.transform.position + Vector3.up, transperspective_speed * Time.deltaTime);
+                        player.transform.position = target_piece.transform.position + Vector3.up;
                     }
                     else
                     {
