@@ -153,11 +153,11 @@ public class BoardManager : MonoBehaviour {
             }
 
             //sort by the value of the pieces
-            piecesToPlace.Sort(
-                (x, y) => {
-                    int result = y.GetComponent<Piece>().value.CompareTo(x.GetComponent<Piece>().value);
-                    return result != 0 ? result : y.name.CompareTo(x.name);
-                });
+            //piecesToPlace.Sort(
+                //(x, y) => {
+                //    int result = y.GetComponent<Piece>().value.CompareTo(x.GetComponent<Piece>().value);
+                //    return result != 0 ? result : y.name.CompareTo(x.name);
+                //});
 
             //instantiate each piece
             for (var i = 0; i < piecesToPlace.Count; i++) {
