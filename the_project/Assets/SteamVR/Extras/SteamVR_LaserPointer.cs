@@ -38,6 +38,7 @@ namespace Valve.VR.Extras
         int control_state = 0;
 
         // global states
+        const int START_GAME = 0;
         const int PLAYER_ONE_SELECT = 1;
         const int PLAYER_ONE_MOVE = 2;
         const int PLAYER_ONE_TRANSPERSPECTIVE = 3;
@@ -51,6 +52,11 @@ namespace Valve.VR.Extras
         GameObject target_piece;
         GameObject target_tile;
         StateMachine stateMachine;
+
+        int[] enemy_move = { -1, -1, -1, -1 };
+        GameObject enemypiece;
+        GameObject enemy_target_tile;
+        Vector3 enemy_target_pos;
 
         BoardManager boardManager;
 
@@ -216,24 +222,43 @@ namespace Valve.VR.Extras
 
         public void LaserEventHandler(PointerEventArgs element, int control_state)
         {
-            PieceBehavior piecebehavior = element.target.gameObject.GetComponent<PieceBehavior>();
-            if (piecebehavior && element.target.gameObject != current_piece)
+            GameObject target = element.target.gameObject;
+            if (stateMachine.STATE == PLAYER_ONE_SELECT)
             {
-                if (stateMachine.STATE == PLAYER_ONE_SELECT)
+                // is the element a piece?
+                if (target.GetComponent<PieceBehavior>() && target != current_piece)
                 {
-                    piecebehavior.control_state = control_state;
+                    target.GetComponent<PieceBehavior>().control_state = control_state;
                     if (control_state == POINTER_CLICK)
                     {
                         target_piece = element.target.gameObject;
                     }
                 }
-            }
-            else
-            {
-                if (stateMachine.STATE == PLAYER_ONE_MOVE && control_state == POINTER_CLICK)
+                else
                 {
-                    target_tile = element.target.gameObject;
-                    Debug.Log("target: " + target_tile.name);
+                    // is it a tile?
+                    if (control_state == POINTER_CLICK)
+                    {
+                        target_tile = element.target.gameObject;
+                        foreach (Position pos in boardManager.possibleMovePositions)
+                        {
+                            string tileName = GetTileName(pos.x, pos.y);
+                            //Debug.Log(tileName);
+                            GameObject current_tile = GameObject.Find(tileName);
+                            if (target_tile.name == current_tile.name)
+                            {
+                                // update board information here
+                                update_board(current_piece.GetComponent<PieceBehavior>().x,
+                                             current_piece.GetComponent<PieceBehavior>().y,
+                                             pos.x,
+                                             pos.y);
+                                current_piece.GetComponent<PieceBehavior>().x = pos.x;
+                                current_piece.GetComponent<PieceBehavior>().y = pos.y;
+                                stateMachine.STATE = PLAYER_ONE_TRANSPERSPECTIVE_1;
+                                break;
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -241,94 +266,92 @@ namespace Valve.VR.Extras
         public void PerspectiveHandler()
         {
             // TO DO: RECONSIDER THIS STATE
-            if (stateMachine.STATE != PLAYER_ONE_TRANSPERSPECTIVE && 
-                stateMachine.STATE != PLAYER_ONE_MOVE &&
-                stateMachine.STATE != PLAYER_ONE_TRANSPERSPECTIVE_1)
+            if (stateMachine.STATE == START_GAME)
+            {
+                current_piece_script = current_piece.GetComponent<PieceBehavior>();
+                boardManager.makeMove(current_piece_script.x, current_piece_script.y);
+                DrawTile(1);
+                stateMachine.STATE = PLAYER_ONE_SELECT;
+            }
+            if (stateMachine.STATE == PLAYER_ONE_SELECT)
             {
                 player.transform.position = current_piece.transform.position + Vector3.up;
             }
-            else
+            if (stateMachine.STATE == PLAYER_ONE_TRANSPERSPECTIVE)
             {
-                if (stateMachine.STATE == PLAYER_ONE_TRANSPERSPECTIVE)
+                if (player.transform.position != target_piece.transform.position + Vector3.up)
                 {
-                    if (player.transform.position != target_piece.transform.position + Vector3.up)
-                    {
-                        //player.transform.position = Vector3.MoveTowards(player.transform.position, target_piece.transform.position + Vector3.up, transperspective_speed * Time.deltaTime);
-                        player.transform.position = target_piece.transform.position + Vector3.up;
-                    }
-                    else
-                    {
-                        Debug.Log("Transperspective complete!");
-                        stateMachine.STATE = PLAYER_ONE_MOVE;
-                        //stateMachine.STATE = PLAYER_ONE_SELECT;
-                        current_piece.GetComponent<MeshRenderer>().enabled = true;
-                        current_piece.GetComponent<Collider>().enabled = true;
-                        current_piece = target_piece;
-                        // highlight possible moves
-                        current_piece_script = current_piece.GetComponent<PieceBehavior>();
-                        boardManager.makeMove(current_piece_script.x, current_piece_script.y);
+                    //player.transform.position = Vector3.MoveTowards(player.transform.position, target_piece.transform.position + Vector3.up, transperspective_speed * Time.deltaTime);
+                    player.transform.position = target_piece.transform.position + Vector3.up;
+                }
+                else
+                {
+                    //Debug.Log("Transperspective complete!");
+                    stateMachine.STATE = PLAYER_ONE_SELECT;
+                    DrawTile(0);
+                    current_piece.GetComponent<MeshRenderer>().enabled = true;
+                    current_piece.GetComponent<Collider>().enabled = true;
+                    current_piece = target_piece;
 
-                        foreach (Position pos in boardManager.possibleMovePositions)
-                        {
-                            string tileName = GetTileName(pos.x, pos.y);
-                            Debug.Log(tileName);
-                            GameObject current_tile = GameObject.Find(tileName);
-                            MaterialControl current_matcontrol = current_tile.GetComponent<MaterialControl>();
-                            Material[] mat = { current_matcontrol.newMaterial1 };
-                            current_tile.GetComponent<MeshRenderer>().materials = mat;
-                        }
-                    }
+                    // highlight possible moves
+                    current_piece_script = current_piece.GetComponent<PieceBehavior>();
+                    boardManager.makeMove(current_piece_script.x, current_piece_script.y);
+                    DrawTile(1);
                 }
-                if (stateMachine.STATE == PLAYER_ONE_MOVE)
+            }
+            if (stateMachine.STATE == PLAYER_ONE_MOVE)
+            {
+                    
+            }
+            if (stateMachine.STATE == PLAYER_ONE_TRANSPERSPECTIVE_1)
+            {
+                Vector3 target_pos_1 = new Vector3(target_tile.transform.position.x,
+                                                player.transform.position.y,
+                                                    target_tile.transform.position.z);
+                Vector3 target_pos_2 = new Vector3(target_tile.transform.position.x,
+                                                current_piece.transform.position.y,
+                                                    target_tile.transform.position.z);
+                current_piece.GetComponent<PieceBehavior>().original_pos = target_pos_2;
+                current_piece.GetComponent<PieceBehavior>().float_pos = current_piece.GetComponent<PieceBehavior>().original_pos + Vector3.up / 5;
+                if (player.transform.position != target_pos_1 || current_piece.transform.position != target_pos_2)
                 {
-                    if (control_state == POINTER_CLICK)
-                    {
-                        foreach (Position pos in boardManager.possibleMovePositions)
-                        {
-                            string tileName = GetTileName(pos.x, pos.y);
-                            Debug.Log(tileName);
-                            GameObject current_tile = GameObject.Find(tileName);
-                            if (target_tile.name == current_tile.name)
-                            {
-                                stateMachine.STATE = PLAYER_ONE_TRANSPERSPECTIVE_1;
-                                break;
-                            }
-                        }
-                    }
+                    player.transform.position = Vector3.MoveTowards(player.transform.position,
+                                                                target_pos_1,
+                                                                transperspective_speed * Time.deltaTime);
+                    current_piece.transform.position = Vector3.MoveTowards(current_piece.transform.position,
+                                                                target_pos_2,
+                                                                transperspective_speed * Time.deltaTime);
                 }
-                if (stateMachine.STATE == PLAYER_ONE_TRANSPERSPECTIVE_1)
+                else
                 {
-                    Vector3 target_pos_1 = new Vector3(target_tile.transform.position.x,
-                                                    player.transform.position.y,
-                                                       target_tile.transform.position.z);
-                    Vector3 target_pos_2 = new Vector3(target_tile.transform.position.x,
-                                                    current_piece.transform.position.y,
-                                                       target_tile.transform.position.z);
-                    current_piece.GetComponent<PieceBehavior>().original_pos = target_pos_2;
-                    current_piece.GetComponent<PieceBehavior>().float_pos = current_piece.GetComponent<PieceBehavior>().original_pos + Vector3.up / 5;
-                    if (player.transform.position.x != target_pos_1.x || current_piece.transform.position.x != target_pos_2.x)
-                    {
-                        player.transform.position = Vector3.MoveTowards(player.transform.position,
-                                                                    target_pos_1,
-                                                                    transperspective_speed * Time.deltaTime);
-                        current_piece.transform.position = Vector3.MoveTowards(current_piece.transform.position,
-                                                                    target_pos_2,
-                                                                    transperspective_speed * Time.deltaTime);
-                    }
-                    else
-                    {
-                        stateMachine.STATE = PLAYER_ONE_SELECT;
-                        foreach (Position pos in boardManager.possibleMovePositions)
-                        {
-                            string tileName = GetTileName(pos.x, pos.y);
-                            Debug.Log(tileName);
-                            GameObject current_tile = GameObject.Find(tileName);
-                            MaterialControl current_matcontrol = current_tile.GetComponent<MaterialControl>();
-                            Material[] mat = { current_matcontrol.newMaterial0 };
-                            current_tile.GetComponent<MeshRenderer>().materials = mat;
-                        }
-                        // TO DO: change state for AI, mark this movement
-                    }
+                    //stateMachine.STATE = PLAYER_ONE_SELECT;
+                    stateMachine.STATE = OPPONENT_MOVES;
+                    boardManager.makeMove(current_piece_script.x, current_piece_script.y);
+                    enemy_move = boardManager.decideAndMoveEnemyPiece();
+                    DrawTile(0);
+                }
+            }
+            if (stateMachine.STATE == OPPONENT_MOVES)
+            {
+                enemypiece = stateMachine.board[enemy_move[0], enemy_move[1]];
+                enemy_target_tile = GameObject.Find(GetTileName(enemy_move[2], enemy_move[3]));
+
+                enemy_target_pos = new Vector3(enemy_target_tile.transform.position.x, 
+                                                enemypiece.transform.position.y, 
+                                                enemy_target_tile.transform.position.z);
+                if (enemypiece.transform.position != enemy_target_pos)
+                {
+                    enemypiece.transform.position = Vector3.MoveTowards(enemypiece.transform.position, enemy_target_pos, transperspective_speed * Time.deltaTime);
+                }
+                else
+                {
+                    //Debug.Log("Enemy move completes!");
+                    stateMachine.STATE = PLAYER_ONE_SELECT;
+                    update_board(enemy_move[0], enemy_move[1], enemy_move[2], enemy_move[3]);
+                    boardManager.resetTiles();
+                    current_piece_script = current_piece.GetComponent<PieceBehavior>();
+                    boardManager.makeMove(current_piece_script.x, current_piece_script.y);
+                    DrawTile(1);
                 }
             }
         }
@@ -338,6 +361,25 @@ namespace Valve.VR.Extras
             string[] name_x = { "H", "G", "F", "E", "D", "C", "B", "A" };
             string[] name_y = { "1", "2", "3", "4", "5", "6", "7", "8" };
             return name_x[x] + name_y[y];
+        }
+
+        public void DrawTile(int matnumber)
+        {
+            foreach (Position pos in boardManager.possibleMovePositions)
+            {
+                string tileName = GetTileName(pos.x, pos.y);
+                //Debug.Log(tileName);
+                GameObject current_tile = GameObject.Find(tileName);
+                MaterialControl current_matcontrol = current_tile.GetComponent<MaterialControl>();
+                Material[] mat = { current_matcontrol.material_list[matnumber] };
+                current_tile.GetComponent<MeshRenderer>().materials = mat;
+            }
+        }
+
+        public void update_board(int x1, int y1, int x2, int y2)
+        {
+            stateMachine.board[x2, y2] = stateMachine.board[x1, y1];
+            stateMachine.board[x1, y1] = null;
         }
     }
 

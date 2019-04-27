@@ -42,10 +42,18 @@ public class BoardManager : MonoBehaviour {
         decideAndMoveEnemyPiece();
     }
 
-    private void decideAndMoveEnemyPiece() {
+    public int[] decideAndMoveEnemyPiece() {
+        int[] ai_move = new int[4];
+
         Move bestMoveForAi = ChessAI.getBestMove(pieces);
         Debug.Log(bestMoveForAi.start.x + "," + bestMoveForAi.start.y + "to" + bestMoveForAi.end.x + "," + bestMoveForAi.end.y);
         movePiece(bestMoveForAi.start, bestMoveForAi.end, true);
+        ai_move[0] = bestMoveForAi.start.x;
+        ai_move[1] = bestMoveForAi.start.y;
+        ai_move[2] = bestMoveForAi.end.x;
+        ai_move[3] = bestMoveForAi.end.y;
+
+        return ai_move;
     }
 
 
@@ -58,7 +66,7 @@ public class BoardManager : MonoBehaviour {
     public void makeMove(int x, int y) {
         Position clickPosition = new Position(x, y);
 
-        Debug.Log("Clicked!");
+        //Debug.Log("Clicked!");
 
         if (isPlayerTurn) {
             if (selectedTile == null) {
@@ -77,8 +85,8 @@ public class BoardManager : MonoBehaviour {
                     setOptions();
                 } else if (new ArrayList(possibleMovePositions).Contains(clickPosition)) {
                     movePiece(selectedTile, clickPosition, false);
-                    doAiTurn();
-                    resetTiles();
+                    //doAiTurn();
+                    //resetTiles();
                 }
                 
             }
@@ -108,14 +116,14 @@ public class BoardManager : MonoBehaviour {
     //tile gui
 
     private void setOptions() {
-        Debug.Log(possibleMovePositions.Length);
+        //Debug.Log(possibleMovePositions.Length);
         for(var i = 0; i < possibleMovePositions.Length; i++) {
-            Debug.Log( possibleMovePositions[i].x + "," + possibleMovePositions[i].y );
+            //Debug.Log( possibleMovePositions[i].x + "," + possibleMovePositions[i].y );
             tiles.get( possibleMovePositions[i] ).GetComponent<Tile>().setAsOption();
         }
     }
     
-    private void resetTiles() {
+    public void resetTiles() {
         for(var i = 0; i < tiles.boardObjects.Length; i++) {
             tiles.asArray()[i].GetComponent<Tile>().setUnSelected();
         }

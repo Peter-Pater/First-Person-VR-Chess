@@ -26,6 +26,7 @@ public class PieceBehavior : MonoBehaviour
     // state machine
     StateMachine stateMachine;
 
+    const int START_GAME = 0;
     const int PLAYER_ONE_SELECT = 1;
     const int PLAYER_ONE_MOVE = 2;
     const int PLAYER_ONE_TRANSPERSPECTIVE = 3;

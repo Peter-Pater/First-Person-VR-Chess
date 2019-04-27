@@ -32,7 +32,8 @@ public abstract class Piece : MonoBehaviour {
     }
 
     public void move(Vector3 end) {
-        StartCoroutine(SmoothMovement(end));
+        //StartCoroutine(SmoothMovement(end));
+        rb2d.MovePosition(end);
     }
 
     public IEnumerator SmoothMovement(Vector3 end) {
@@ -44,7 +45,6 @@ public abstract class Piece : MonoBehaviour {
             sqrRemainingDistance = (transform.position - end).sqrMagnitude;
             yield return null;
         }
-
     }
 
     public abstract Move[] getMovesFromLocationOnBoard(Position position, Board board);
