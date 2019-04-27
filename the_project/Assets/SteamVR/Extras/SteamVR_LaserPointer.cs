@@ -165,7 +165,7 @@ namespace Valve.VR.Extras
                 argsIn.flags = 0;
                 argsIn.target = hit.transform;
                 OnPointerIn(argsIn);
-                Debug.Log("Current: " + hit.transform.name);
+                //Debug.Log("Current: " + hit.transform.name);
                 //Debug.Log("Previous: " + previousContact.name);
                 previousContact = hit.transform;
                 LaserEventHandler(argsIn, POINTER_IN);
@@ -233,6 +233,7 @@ namespace Valve.VR.Extras
                 if (stateMachine.STATE == PLAYER_ONE_MOVE && control_state == POINTER_CLICK)
                 {
                     target_tile = element.target.gameObject;
+                    Debug.Log("target: " + target_tile.name);
                 }
             }
         }
@@ -240,7 +241,9 @@ namespace Valve.VR.Extras
         public void PerspectiveHandler()
         {
             // TO DO: RECONSIDER THIS STATE
-            if (stateMachine.STATE != PLAYER_ONE_TRANSPERSPECTIVE && stateMachine.STATE != PLAYER_ONE_MOVE)
+            if (stateMachine.STATE != PLAYER_ONE_TRANSPERSPECTIVE && 
+                stateMachine.STATE != PLAYER_ONE_MOVE &&
+                stateMachine.STATE != PLAYER_ONE_TRANSPERSPECTIVE_1)
             {
                 player.transform.position = current_piece.transform.position + Vector3.up;
             }
@@ -267,8 +270,11 @@ namespace Valve.VR.Extras
                         foreach (Position pos in boardManager.possibleMovePositions)
                         {
                             string tileName = GetTileName(pos.x, pos.y);
-                            Material mat = Resources.Load("Floor1", typeof(Material)) as Material;
-                            GameObject.Find(tileName).GetComponent<MeshRenderer>().materials[0] = mat;
+                            Debug.Log(tileName);
+                            GameObject current_tile = GameObject.Find(tileName);
+                            MaterialControl current_matcontrol = current_tile.GetComponent<MaterialControl>();
+                            Material[] mat = { current_matcontrol.newMaterial1 };
+                            current_tile.GetComponent<MeshRenderer>().materials = mat;
                         }
                     }
                 }
@@ -276,23 +282,50 @@ namespace Valve.VR.Extras
                 {
                     if (control_state == POINTER_CLICK)
                     {
-                        stateMachine.STATE = PLAYER_ONE_TRANSPERSPECTIVE_1;
+                        foreach (Position pos in boardManager.possibleMovePositions)
+                        {
+                            string tileName = GetTileName(pos.x, pos.y);
+                            Debug.Log(tileName);
+                            GameObject current_tile = GameObject.Find(tileName);
+                            if (target_tile.name == current_tile.name)
+                            {
+                                stateMachine.STATE = PLAYER_ONE_TRANSPERSPECTIVE_1;
+                                break;
+                            }
+                        }
                     }
                 }
                 if (stateMachine.STATE == PLAYER_ONE_TRANSPERSPECTIVE_1)
                 {
-                    Vector3 target_pos = new Vector3(target_tile.transform.position.x,
-                                                       target_tile.transform.position.y,
-                                                       current_piece.transform.position.z);
-                    if (player.transform.position != target_pos)
+                    Vector3 target_pos_1 = new Vector3(target_tile.transform.position.x,
+                                                    player.transform.position.y,
+                                                       target_tile.transform.position.z);
+                    Vector3 target_pos_2 = new Vector3(target_tile.transform.position.x,
+                                                    current_piece.transform.position.y,
+                                                       target_tile.transform.position.z);
+                    current_piece.GetComponent<PieceBehavior>().original_pos = target_pos_2;
+                    current_piece.GetComponent<PieceBehavior>().float_pos = current_piece.GetComponent<PieceBehavior>().original_pos + Vector3.up / 5;
+                    if (player.transform.position.x != target_pos_1.x || current_piece.transform.position.x != target_pos_2.x)
                     {
                         player.transform.position = Vector3.MoveTowards(player.transform.position,
-                                                                    target_pos,
+                                                                    target_pos_1,
+                                                                    transperspective_speed * Time.deltaTime);
+                        current_piece.transform.position = Vector3.MoveTowards(current_piece.transform.position,
+                                                                    target_pos_2,
                                                                     transperspective_speed * Time.deltaTime);
                     }
                     else
                     {
                         stateMachine.STATE = PLAYER_ONE_SELECT;
+                        foreach (Position pos in boardManager.possibleMovePositions)
+                        {
+                            string tileName = GetTileName(pos.x, pos.y);
+                            Debug.Log(tileName);
+                            GameObject current_tile = GameObject.Find(tileName);
+                            MaterialControl current_matcontrol = current_tile.GetComponent<MaterialControl>();
+                            Material[] mat = { current_matcontrol.newMaterial0 };
+                            current_tile.GetComponent<MeshRenderer>().materials = mat;
+                        }
                         // TO DO: change state for AI, mark this movement
                     }
                 }
