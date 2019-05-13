@@ -4,8 +4,8 @@ using System.Collections.Generic;
 
 public class MoveFactory
 {
-    Board _board;
-    List<Move> moves = new List<Move>();
+    Board_new _board;
+    List<Move_new> moves = new List<Move_new>();
     Dictionary<Piece.pieceType, System.Action> pieceToFunction = new Dictionary<Piece.pieceType, System.Action>();
 
     private Piece _piece;
@@ -13,7 +13,7 @@ public class MoveFactory
     private Piece.playerColor _player;
     private Vector2 _position;
 
-    public MoveFactory(Board board)
+    public MoveFactory(Board_new board)
     {
         _board = board;
         pieceToFunction.Add(Piece.pieceType.PAWN, _GetPawnMoves);
@@ -24,7 +24,7 @@ public class MoveFactory
         pieceToFunction.Add(Piece.pieceType.KING, _GetKingMoves);
     }
 
-    public List<Move> GetMoves(Piece piece, Vector2 position)
+    public List<Move_new> GetMoves(Piece piece, Vector2 position)
     {
         _piece = piece;
         _type = piece.Type;
@@ -179,7 +179,7 @@ public class MoveFactory
     {
         if (_IsOnBoard(move) && (!_ContainsPiece(_board.GetTileFromBoard(move)) || _IsEnemy(_board.GetTileFromBoard(move))))
         {
-            Move m = new Move();
+            Move_new m = new Move_new();
             m.firstPosition = _board.GetTileFromBoard(_position);
             m.pieceMoved = _piece;
             m.secondPosition = _board.GetTileFromBoard(move);

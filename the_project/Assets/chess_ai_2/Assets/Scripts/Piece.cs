@@ -23,8 +23,8 @@ public class Piece : MonoBehaviour
     private Vector3 moveTo;
     private GameManager manager;
 
-    private MoveFactory factory = new MoveFactory(Board.Instance);
-    private List<Move> moves = new List<Move>();
+    private MoveFactory factory = new MoveFactory(Board_new.Instance);
+    private List<Move_new> moves = new List<Move_new>();
 
     private bool _hasMoved = false;
     public bool HasMoved
@@ -46,7 +46,7 @@ public class Piece : MonoBehaviour
 
             moves = factory.GetMoves(this, position);
 
-            foreach (Move move in moves)
+            foreach (Move_new move in moves)
             {
                 //Debug.Log(move.secondPosition.Position.x);
                 //Debug.Log(move.secondPosition.Position.y);

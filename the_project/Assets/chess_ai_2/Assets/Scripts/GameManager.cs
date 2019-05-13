@@ -5,10 +5,10 @@ public class GameManager : MonoBehaviour
 {
     AlphaBeta ab = new AlphaBeta();
     private bool _kingDead = false;
-    Board _board;
+    Board_new _board;
 	void Start ()
     {
-        _board = Board.Instance;
+        _board = Board_new.Instance;
         _board.SetupBoard();
 	}
 
@@ -23,7 +23,7 @@ public class GameManager : MonoBehaviour
 
         if (!playerTurn)
         {
-            Move move = ab.GetMove();
+            Move_new move = ab.GetMove();
             //Debug.Log(move.secondPosition.Position.x);
             //Debug.Log(move.secondPosition.Position.y);
             _DoAIMove(move);
@@ -32,7 +32,7 @@ public class GameManager : MonoBehaviour
 
     public bool playerTurn = true;
 
-    void _DoAIMove(Move move)
+    void _DoAIMove(Move_new move)
     {
         Tile firstPosition = move.firstPosition;
         Tile secondPosition = move.secondPosition;
@@ -48,7 +48,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void SwapPieces(Move move)
+    public void SwapPieces(Move_new move)
     {
         GameObject[] objects = GameObject.FindGameObjectsWithTag("Highlight");
         foreach (GameObject o in objects)

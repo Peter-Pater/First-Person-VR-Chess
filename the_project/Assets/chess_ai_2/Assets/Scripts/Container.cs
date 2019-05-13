@@ -3,7 +3,7 @@ using System.Collections;
 
 public class Container : MonoBehaviour
 {
-    public Move move;
+    public Move_new move;
     GameManager manager;
 
     void Start()

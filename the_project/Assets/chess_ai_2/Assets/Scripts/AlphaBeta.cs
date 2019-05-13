@@ -6,22 +6,22 @@ public class AlphaBeta
 {
     int maxDepth = 3;
 
-    List<Move> _moves = new List<Move>();
+    List<Move_new> _moves = new List<Move_new>();
     List<Tile> _tilesWithPieces = new List<Tile>();
     List<Tile> _blackPieces = new List<Tile>();
     List<Tile> _whitePieces = new List<Tile>();
-    Stack<Move> moveStack = new Stack<Move>();
+    Stack<Move_new> moveStack = new Stack<Move_new>();
     Weights _weight = new Weights();
-    Tile[,] _localBoard = new Tile[8,8];
+    Tile[,] _localBoard_new = new Tile[8,8];
     int _whiteScore = 0;
     int _blackScore = 0;
-    Move bestMove;
+    Move_new bestMove;
 
-    Board _board;
+    Board_new _board;
 
-    public Move GetMove()
+    public Move_new GetMove()
     {
-        _board = Board.Instance;
+        _board = Board_new.Instance;
         bestMove = _CreateMove(_board.GetTileFromBoard(new Vector2(0, 0)), _board.GetTileFromBoard(new Vector2(0, 0)));
         AB(maxDepth, -100000000, 1000000000, true);
         return bestMove;
@@ -29,7 +29,7 @@ public class AlphaBeta
 
     int AB(int depth, int alpha, int beta, bool max)
     {
-        _GetBoardState();
+        _GetBoard_newState();
 
         if (depth == 0)
         {
@@ -38,8 +38,8 @@ public class AlphaBeta
         if (max)
         {
             int score = -10000000;
-            List<Move> allMoves = _GetMoves(Piece.playerColor.BLACK);
-            foreach (Move move in allMoves)
+            List<Move_new> allMoves = _GetMoves(Piece.playerColor.BLACK);
+            foreach (Move_new move in allMoves)
             {
                 moveStack.Push(move);
 
@@ -68,8 +68,8 @@ public class AlphaBeta
         else
         {
             int score = 10000000;
-            List<Move> allMoves = _GetMoves(Piece.playerColor.WHITE);
-            foreach (Move move in allMoves)
+            List<Move_new> allMoves = _GetMoves(Piece.playerColor.WHITE);
+            foreach (Move_new move in allMoves)
             {
                 moveStack.Push(move);
 
@@ -95,7 +95,7 @@ public class AlphaBeta
 
     void _UndoFakeMove()
     {
-        Move tempMove = moveStack.Pop();
+        Move_new tempMove = moveStack.Pop();
         Tile movedTo = tempMove.secondPosition;
         Tile movedFrom = tempMove.firstPosition;
         Piece pieceKilled = tempMove.pieceKilled;
@@ -119,9 +119,9 @@ public class AlphaBeta
         currentTile.CurrentPiece = null;
     }
 
-    List<Move> _GetMoves(Piece.playerColor color)
+    List<Move_new> _GetMoves(Piece.playerColor color)
     {
-        List<Move> turnMove = new List<Move>();
+        List<Move_new> turnMove = new List<Move_new>();
         List<Tile> pieces = new List<Tile>();
 
         if (color == Piece.playerColor.BLACK)
@@ -131,11 +131,11 @@ public class AlphaBeta
         foreach (Tile tile in pieces)
         {
             MoveFactory factory = new MoveFactory(_board);
-            List<Move> pieceMoves = factory.GetMoves(tile.CurrentPiece, tile.Position);
+            List<Move_new> pieceMoves = factory.GetMoves(tile.CurrentPiece, tile.Position);
 
-            foreach(Move move in pieceMoves)
+            foreach(Move_new move in pieceMoves)
             {
-                Move newMove = _CreateMove(move.firstPosition, move.secondPosition);
+                Move_new newMove = _CreateMove(move.firstPosition, move.secondPosition);
                 turnMove.Add(newMove);
             }
         }
@@ -160,7 +160,7 @@ public class AlphaBeta
         return Mathf.RoundToInt(pieceDifference * 100);
     }
 
-    void _GetBoardState()
+    void _GetBoard_newState()
     {
         _blackPieces.Clear();
         _whitePieces.Clear();
@@ -172,10 +172,10 @@ public class AlphaBeta
         {
             for (int x = 0; x < 8; x++)
             {
-                _localBoard[x, y] = _board.GetTileFromBoard(new Vector2(x, y));
-                if (_localBoard[x, y].CurrentPiece != null && _localBoard[x, y].CurrentPiece.Type != Piece.pieceType.UNKNOWN)
+                _localBoard_new[x, y] = _board.GetTileFromBoard(new Vector2(x, y));
+                if (_localBoard_new[x, y].CurrentPiece != null && _localBoard_new[x, y].CurrentPiece.Type != Piece.pieceType.UNKNOWN)
                 {
-                    _tilesWithPieces.Add(_localBoard[x, y]);
+                    _tilesWithPieces.Add(_localBoard_new[x, y]);
                 }
             }
         }
@@ -194,9 +194,9 @@ public class AlphaBeta
         }
     }
 
-    Move _CreateMove(Tile tile, Tile move)
+    Move_new _CreateMove(Tile tile, Tile move)
     {
-        Move tempMove = new Move();
+        Move_new tempMove = new Move_new();
         tempMove.firstPosition = tile;
         tempMove.pieceMoved = tile.CurrentPiece;
         tempMove.secondPosition = move;

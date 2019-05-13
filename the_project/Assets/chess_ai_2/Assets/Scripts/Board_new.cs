@@ -1,16 +1,16 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Board
+public class Board_new
 {
-    private static Board _instance = null;
-    public static Board Instance
+    private static Board_new _instance = null;
+    public static Board_new Instance
     {
         get
         {
             if (_instance == null)
             {
-                _instance = new Board();
+                _instance = new Board_new();
             }
             return _instance;
         }
