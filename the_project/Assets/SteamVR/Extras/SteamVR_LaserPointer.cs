@@ -60,6 +60,9 @@ namespace Valve.VR.Extras
 
         BoardManager boardManager;
 
+        // new ai
+        Piece_new piece_selected;
+
         private void Start()
         {
             boardManager = GameObject.Find("ChessManager").GetComponent<BoardManager>();
@@ -373,6 +376,15 @@ namespace Valve.VR.Extras
                 MaterialControl current_matcontrol = current_tile.GetComponent<MaterialControl>();
                 Material[] mat = { current_matcontrol.material_list[matnumber] };
                 current_tile.GetComponent<MeshRenderer>().materials = mat;
+            }
+
+            piece_selected = GameObject.Find("0 6").GetComponent<Piece_new>();
+            piece_selected.Selected();
+
+            foreach(Move_new move in piece_selected.moves)
+            {
+                Debug.Log(move.secondPosition.Position.x);
+                Debug.Log(move.secondPosition.Position.y);
             }
         }
 

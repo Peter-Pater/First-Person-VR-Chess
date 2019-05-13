@@ -24,7 +24,7 @@ public class Piece_new : MonoBehaviour
     private GameManager manager;
 
     private MoveFactory factory = new MoveFactory(Board_new.Instance);
-    private List<Move_new> moves = new List<Move_new>();
+    public List<Move_new> moves = new List<Move_new>();
 
     private bool _hasMoved = false;
     public bool HasMoved
@@ -33,40 +33,39 @@ public class Piece_new : MonoBehaviour
         set { _hasMoved = value; }
     }
 
-    void OnMouseOver()
+    public void Selected ()
     {
-        if (Input.GetMouseButtonDown(0) && _player == playerColor.WHITE && manager.playerTurn)
+        moves.Clear();
+        GameObject[] objects = GameObject.FindGameObjectsWithTag("Highlight");
+        foreach (GameObject o in objects)
         {
-            moves.Clear();
-            GameObject[] objects = GameObject.FindGameObjectsWithTag("Highlight");
-            foreach (GameObject o in objects)
-            {
-                Destroy(o);
-            }
-
-            moves = factory.GetMoves(this, position);
-
-            foreach (Move_new move in moves)
-            {
-                //Debug.Log(move.secondPosition.Position.x);
-                //Debug.Log(move.secondPosition.Position.y);
-
-                if (move.pieceKilled == null)
-                {
-                    GameObject instance = Instantiate(Resources.Load("MoveCube")) as GameObject;
-                    instance.transform.position = new Vector3(-move.secondPosition.Position.x, 0, move.secondPosition.Position.y);
-                    instance.GetComponent<Container>().move = move;
-                }
-                else if (move.pieceKilled != null)
-                {
-                    GameObject instance = Instantiate(Resources.Load("KillCube")) as GameObject;
-                    instance.transform.position = new Vector3(-move.secondPosition.Position.x, 0, move.secondPosition.Position.y);
-                    instance.GetComponent<Container>().move = move;
-                }
-            }
-            GameObject i = Instantiate(Resources.Load("CurrentPiece")) as GameObject;
-            i.transform.position = this.transform.position;
+            Destroy(o);
         }
+
+        moves = factory.GetMoves(this, position);
+
+        foreach (Move_new move in moves)
+        {
+            //Debug.Log(move.secondPosition.Position.x);
+            //Debug.Log(move.secondPosition.Position.y);
+
+            if (move.pieceKilled == null)
+            {
+                GameObject instance = Instantiate(Resources.Load("MoveCube")) as GameObject;
+                instance.transform.position = new Vector3(-move.secondPosition.Position.x, 0, move.secondPosition.Position.y);
+                instance.GetComponent<Container>().move = move;
+                instance.name = move.secondPosition.Position.x.ToString() + move.secondPosition.Position.y.ToString();
+            }
+            else if (move.pieceKilled != null)
+            {
+                GameObject instance = Instantiate(Resources.Load("KillCube")) as GameObject;
+                instance.transform.position = new Vector3(-move.secondPosition.Position.x, 0, move.secondPosition.Position.y);
+                instance.GetComponent<Container>().move = move;
+                instance.name = move.secondPosition.Position.x.ToString() + move.secondPosition.Position.y.ToString();
+            }
+        }
+        GameObject i = Instantiate(Resources.Load("CurrentPiece")) as GameObject;
+        i.transform.position = this.transform.position;
     }
 
     public void MovePiece(Vector3 position)
