@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class Piece : MonoBehaviour
+public class Piece_new : MonoBehaviour
 {
     public enum pieceType { KING, QUEEN, BISHOP, ROOK, KNIGHT, PAWN, UNKNOWN = -1};
     public enum playerColor { BLACK, WHITE, UNKNOWN = -1};

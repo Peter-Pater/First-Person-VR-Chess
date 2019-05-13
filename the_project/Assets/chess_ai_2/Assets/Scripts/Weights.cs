@@ -171,37 +171,37 @@ public class Weights : MonoBehaviour
         {-50,-40,-30,-20,-20,-30,-40,-50}
     };
 
-    public int GetBoardWeight(Piece.pieceType type, Vector2 position, Piece.playerColor color)
+    public int GetBoardWeight(Piece_new.pieceType type, Vector2 position, Piece_new.playerColor color)
     {
         switch (type)
         {
-            case Piece.pieceType.PAWN:
-                if (color == Piece.playerColor.WHITE)
+            case Piece_new.pieceType.PAWN:
+                if (color == Piece_new.playerColor.WHITE)
                     return PawnBoardWeight[(int)position.x, (int)position.y];
                 else
                     return PawnMirrorBoardWeight[(int)position.x, (int)position.y];
-            case Piece.pieceType.ROOK:
-                if (color == Piece.playerColor.WHITE)
+            case Piece_new.pieceType.ROOK:
+                if (color == Piece_new.playerColor.WHITE)
                     return RookBoardWeight[(int)position.x, (int)position.y];
                 else
                     return RookMirrorBoardWeight[(int)position.x, (int)position.y];
-            case Piece.pieceType.KNIGHT:
-                if (color == Piece.playerColor.WHITE)
+            case Piece_new.pieceType.KNIGHT:
+                if (color == Piece_new.playerColor.WHITE)
                     return KnightBoardWeight[(int)position.x, (int)position.y];
                 else
                     return KnightMirrorBoardWeight[(int)position.x, (int)position.y];
-            case Piece.pieceType.BISHOP:
-                if (color == Piece.playerColor.WHITE)
+            case Piece_new.pieceType.BISHOP:
+                if (color == Piece_new.playerColor.WHITE)
                     return BishopBoardWeight[(int)position.x, (int)position.y];
                 else
                     return BishopMirrowBoardWeight[(int)position.x, (int)position.y];
-            case Piece.pieceType.QUEEN:
-                if (color == Piece.playerColor.WHITE)
+            case Piece_new.pieceType.QUEEN:
+                if (color == Piece_new.playerColor.WHITE)
                     return QueenBoardWeight[(int)position.x, (int)position.y];
                 else
                     return QueenMirrorBoardWeight[(int)position.x, (int)position.y];
-            case Piece.pieceType.KING:
-                if (color == Piece.playerColor.WHITE)
+            case Piece_new.pieceType.KING:
+                if (color == Piece_new.playerColor.WHITE)
                     return KingBoardWeight[(int)position.x, (int)position.y];
                 else
                     return KingMirrorBoardWeight[(int)position.x, (int)position.y];
@@ -210,21 +210,21 @@ public class Weights : MonoBehaviour
         }
     }
 
-    public int GetPieceWeight(Piece.pieceType type)
+    public int GetPieceWeight(Piece_new.pieceType type)
     {
         switch (type)
         {
-            case Piece.pieceType.PAWN:
+            case Piece_new.pieceType.PAWN:
                 return 1;
-            case Piece.pieceType.ROOK:
+            case Piece_new.pieceType.ROOK:
                 return 5;
-            case Piece.pieceType.KNIGHT:
+            case Piece_new.pieceType.KNIGHT:
                 return 3;
-            case Piece.pieceType.BISHOP:
+            case Piece_new.pieceType.BISHOP:
                 return 3;
-            case Piece.pieceType.QUEEN:
+            case Piece_new.pieceType.QUEEN:
                 return 9;
-            case Piece.pieceType.KING:
+            case Piece_new.pieceType.KING:
                 return 1000000;
             default:
                 return -1;

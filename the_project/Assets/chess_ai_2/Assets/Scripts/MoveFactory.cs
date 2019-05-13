@@ -6,32 +6,32 @@ public class MoveFactory
 {
     Board_new _board;
     List<Move_new> moves = new List<Move_new>();
-    Dictionary<Piece.pieceType, System.Action> pieceToFunction = new Dictionary<Piece.pieceType, System.Action>();
+    Dictionary<Piece_new.pieceType, System.Action> pieceToFunction = new Dictionary<Piece_new.pieceType, System.Action>();
 
-    private Piece _piece;
-    private Piece.pieceType _type;
-    private Piece.playerColor _player;
+    private Piece_new _piece;
+    private Piece_new.pieceType _type;
+    private Piece_new.playerColor _player;
     private Vector2 _position;
 
     public MoveFactory(Board_new board)
     {
         _board = board;
-        pieceToFunction.Add(Piece.pieceType.PAWN, _GetPawnMoves);
-        pieceToFunction.Add(Piece.pieceType.ROOK, _GetRookMoves);
-        pieceToFunction.Add(Piece.pieceType.KNIGHT, _GetKnightMoves);
-        pieceToFunction.Add(Piece.pieceType.BISHOP, _GetBishopMoves);
-        pieceToFunction.Add(Piece.pieceType.QUEEN, _GetQueenMoves);
-        pieceToFunction.Add(Piece.pieceType.KING, _GetKingMoves);
+        pieceToFunction.Add(Piece_new.pieceType.PAWN, _GetPawnMoves);
+        pieceToFunction.Add(Piece_new.pieceType.ROOK, _GetRookMoves);
+        pieceToFunction.Add(Piece_new.pieceType.KNIGHT, _GetKnightMoves);
+        pieceToFunction.Add(Piece_new.pieceType.BISHOP, _GetBishopMoves);
+        pieceToFunction.Add(Piece_new.pieceType.QUEEN, _GetQueenMoves);
+        pieceToFunction.Add(Piece_new.pieceType.KING, _GetKingMoves);
     }
 
-    public List<Move_new> GetMoves(Piece piece, Vector2 position)
+    public List<Move_new> GetMoves(Piece_new piece, Vector2 position)
     {
         _piece = piece;
         _type = piece.Type;
         _player = piece.Player;
         _position = position;
 
-        foreach(KeyValuePair<Piece.pieceType, System.Action> p in pieceToFunction)
+        foreach(KeyValuePair<Piece_new.pieceType, System.Action> p in pieceToFunction)
         {
             if (_type == p.Key)
             {
@@ -44,15 +44,15 @@ public class MoveFactory
 
     void _GetPawnMoves()
     {
-        if (_piece.Player == Piece.playerColor.BLACK)
+        if (_piece.Player == Piece_new.playerColor.BLACK)
         {
             int limit = _piece.HasMoved ? 2 : 3;
             _GenerateMove(limit, new Vector2(0, 1));
 
             Vector2 diagLeft = new Vector2(_position.x - 1, _position.y + 1);
             Vector2 diagRight = new Vector2(_position.x + 1, _position.y + 1);
-            Tile dl = null;
-            Tile dr = null;
+            Tile_new dl = null;
+            Tile_new dr = null;
             if (_IsOnBoard(diagLeft))
             {
                 dl = _board.GetTileFromBoard(diagLeft);
@@ -78,8 +78,8 @@ public class MoveFactory
 
             Vector2 diagLeft = new Vector2(_position.x - 1, _position.y - 1);
             Vector2 diagRight = new Vector2(_position.x + 1, _position.y - 1);
-            Tile dl = null;
-            Tile dr = null;
+            Tile_new dl = null;
+            Tile_new dr = null;
             if (_IsOnBoard(diagLeft))
             {
                 dl = _board.GetTileFromBoard(diagLeft);
@@ -165,7 +165,7 @@ public class MoveFactory
             Vector2 move = _position + direction * i;
             if (_IsOnBoard(move) && _ContainsPiece(_board.GetTileFromBoard(move)))
             {
-                if (_IsEnemy(_board.GetTileFromBoard(move)) && _type != Piece.pieceType.PAWN)
+                if (_IsEnemy(_board.GetTileFromBoard(move)) && _type != Piece_new.pieceType.PAWN)
                 {
                     _CheckAndStoreMove(move);
                 }
@@ -191,7 +191,7 @@ public class MoveFactory
         }
     }
 
-    bool _IsEnemy(Tile tile)
+    bool _IsEnemy(Tile_new tile)
     {
         if (_player != tile.CurrentPiece.Player)
             return true;
@@ -199,7 +199,7 @@ public class MoveFactory
             return false;
     }
 
-    bool _ContainsPiece(Tile tile)
+    bool _ContainsPiece(Tile_new tile)
     {
         if (!_IsOnBoard(tile.Position))
             return false;

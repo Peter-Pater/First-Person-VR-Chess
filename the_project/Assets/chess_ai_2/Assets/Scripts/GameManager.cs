@@ -34,10 +34,10 @@ public class GameManager : MonoBehaviour
 
     void _DoAIMove(Move_new move)
     {
-        Tile firstPosition = move.firstPosition;
-        Tile secondPosition = move.secondPosition;
+        Tile_new firstPosition = move.firstPosition;
+        Tile_new secondPosition = move.secondPosition;
 
-        if (secondPosition.CurrentPiece && secondPosition.CurrentPiece.Type == Piece.pieceType.KING)
+        if (secondPosition.CurrentPiece && secondPosition.CurrentPiece.Type == Piece_new.pieceType.KING)
         {
             SwapPieces(move);
             _kingDead = true;
@@ -56,14 +56,14 @@ public class GameManager : MonoBehaviour
             Destroy(o);
         }
 
-        Tile firstTile = move.firstPosition;
-        Tile secondTile = move.secondPosition;
+        Tile_new firstTile = move.firstPosition;
+        Tile_new secondTile = move.secondPosition;
 
         firstTile.CurrentPiece.MovePiece(new Vector3(-move.secondPosition.Position.x, 0, move.secondPosition.Position.y));
 
         if (secondTile.CurrentPiece != null)
         {
-            if (secondTile.CurrentPiece.Type == Piece.pieceType.KING)
+            if (secondTile.CurrentPiece.Type == Piece_new.pieceType.KING)
                 _kingDead = true;
             Destroy(secondTile.CurrentPiece.gameObject);
         }

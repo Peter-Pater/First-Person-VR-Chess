@@ -7,12 +7,12 @@ public class AlphaBeta
     int maxDepth = 3;
 
     List<Move_new> _moves = new List<Move_new>();
-    List<Tile> _tilesWithPieces = new List<Tile>();
-    List<Tile> _blackPieces = new List<Tile>();
-    List<Tile> _whitePieces = new List<Tile>();
+    List<Tile_new> _tilesWithPieces = new List<Tile_new>();
+    List<Tile_new> _blackPieces = new List<Tile_new>();
+    List<Tile_new> _whitePieces = new List<Tile_new>();
     Stack<Move_new> moveStack = new Stack<Move_new>();
     Weights _weight = new Weights();
-    Tile[,] _localBoard_new = new Tile[8,8];
+    Tile_new[,] _localBoard_new = new Tile_new[8,8];
     int _whiteScore = 0;
     int _blackScore = 0;
     Move_new bestMove;
@@ -38,7 +38,7 @@ public class AlphaBeta
         if (max)
         {
             int score = -10000000;
-            List<Move_new> allMoves = _GetMoves(Piece.playerColor.BLACK);
+            List<Move_new> allMoves = _GetMoves(Piece_new.playerColor.BLACK);
             foreach (Move_new move in allMoves)
             {
                 moveStack.Push(move);
@@ -68,7 +68,7 @@ public class AlphaBeta
         else
         {
             int score = 10000000;
-            List<Move_new> allMoves = _GetMoves(Piece.playerColor.WHITE);
+            List<Move_new> allMoves = _GetMoves(Piece_new.playerColor.WHITE);
             foreach (Move_new move in allMoves)
             {
                 moveStack.Push(move);
@@ -96,10 +96,10 @@ public class AlphaBeta
     void _UndoFakeMove()
     {
         Move_new tempMove = moveStack.Pop();
-        Tile movedTo = tempMove.secondPosition;
-        Tile movedFrom = tempMove.firstPosition;
-        Piece pieceKilled = tempMove.pieceKilled;
-        Piece pieceMoved = tempMove.pieceMoved;
+        Tile_new movedTo = tempMove.secondPosition;
+        Tile_new movedFrom = tempMove.firstPosition;
+        Piece_new pieceKilled = tempMove.pieceKilled;
+        Piece_new pieceMoved = tempMove.pieceMoved;
 
         movedFrom.CurrentPiece = movedTo.CurrentPiece;
 
@@ -113,22 +113,22 @@ public class AlphaBeta
         }
     }
 
-    void _DoFakeMove(Tile currentTile, Tile targetTile)
+    void _DoFakeMove(Tile_new currentTile, Tile_new targetTile)
     {
         targetTile.SwapFakePieces(currentTile.CurrentPiece);
         currentTile.CurrentPiece = null;
     }
 
-    List<Move_new> _GetMoves(Piece.playerColor color)
+    List<Move_new> _GetMoves(Piece_new.playerColor color)
     {
         List<Move_new> turnMove = new List<Move_new>();
-        List<Tile> pieces = new List<Tile>();
+        List<Tile_new> pieces = new List<Tile_new>();
 
-        if (color == Piece.playerColor.BLACK)
+        if (color == Piece_new.playerColor.BLACK)
             pieces = _blackPieces;
         else pieces = _whitePieces;
 
-        foreach (Tile tile in pieces)
+        foreach (Tile_new tile in pieces)
         {
             MoveFactory factory = new MoveFactory(_board);
             List<Move_new> pieceMoves = factory.GetMoves(tile.CurrentPiece, tile.Position);
@@ -148,13 +148,13 @@ public class AlphaBeta
         float whiteWeight = 0;
         float blackWeight = 0;
 
-        foreach(Tile tile in _whitePieces)
+        foreach(Tile_new tile in _whitePieces)
         {
-            whiteWeight += _weight.GetBoardWeight(tile.CurrentPiece.Type, tile.CurrentPiece.position, Piece.playerColor.WHITE);
+            whiteWeight += _weight.GetBoardWeight(tile.CurrentPiece.Type, tile.CurrentPiece.position, Piece_new.playerColor.WHITE);
         }
-        foreach (Tile tile in _blackPieces)
+        foreach (Tile_new tile in _blackPieces)
         {
-            blackWeight += _weight.GetBoardWeight(tile.CurrentPiece.Type, tile.CurrentPiece.position, Piece.playerColor.BLACK);
+            blackWeight += _weight.GetBoardWeight(tile.CurrentPiece.Type, tile.CurrentPiece.position, Piece_new.playerColor.BLACK);
         }
         pieceDifference = (_blackScore + (blackWeight / 100)) - (_whiteScore + (whiteWeight / 100));
         return Mathf.RoundToInt(pieceDifference * 100);
@@ -173,15 +173,15 @@ public class AlphaBeta
             for (int x = 0; x < 8; x++)
             {
                 _localBoard_new[x, y] = _board.GetTileFromBoard(new Vector2(x, y));
-                if (_localBoard_new[x, y].CurrentPiece != null && _localBoard_new[x, y].CurrentPiece.Type != Piece.pieceType.UNKNOWN)
+                if (_localBoard_new[x, y].CurrentPiece != null && _localBoard_new[x, y].CurrentPiece.Type != Piece_new.pieceType.UNKNOWN)
                 {
                     _tilesWithPieces.Add(_localBoard_new[x, y]);
                 }
             }
         }
-        foreach (Tile tile in _tilesWithPieces)
+        foreach (Tile_new tile in _tilesWithPieces)
         {
-            if (tile.CurrentPiece.Player == Piece.playerColor.BLACK)
+            if (tile.CurrentPiece.Player == Piece_new.playerColor.BLACK)
             {
                 _blackScore += _weight.GetPieceWeight(tile.CurrentPiece.Type);
                 _blackPieces.Add(tile);
@@ -194,7 +194,7 @@ public class AlphaBeta
         }
     }
 
-    Move_new _CreateMove(Tile tile, Tile move)
+    Move_new _CreateMove(Tile_new tile, Tile_new move)
     {
         Move_new tempMove = new Move_new();
         tempMove.firstPosition = tile;
