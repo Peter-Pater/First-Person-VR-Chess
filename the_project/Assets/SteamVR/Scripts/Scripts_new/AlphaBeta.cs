@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class AlphaBeta
 {
-    int maxDepth = 3;
+    int maxDepth = 1;
 
     List<Move_new> _moves = new List<Move_new>();
     List<Tile_new> _tilesWithPieces = new List<Tile_new>();

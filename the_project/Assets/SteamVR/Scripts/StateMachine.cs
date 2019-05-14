@@ -12,6 +12,7 @@ public class StateMachine : MonoBehaviour
     const int PLAYER_ONE_TRANSPERSPECTIVE = 3;
     const int PLAYER_ONE_TRANSPERSPECTIVE_1 = 4;
     const int OPPONENT_MOVES = 5;
+    const int END_GAME = 6;
 
     public int STATE;
 
@@ -28,10 +29,10 @@ public class StateMachine : MonoBehaviour
         STATE = START_GAME;
         for (int i = 0; i < 8; i++)
         {
-            board[i, 0] = white_pieces[i];
-            board[i, 1] = white_pawns[i];
-            board[i, 6] = black_pawns[i];
-            board[i, 7] = black_pieces[i];
+            board[i, 7] = white_pieces[7 - i];
+            board[i, 6] = white_pawns[7 - i];
+            board[i, 1] = black_pawns[7 - i];
+            board[i, 0] = black_pieces[7 - i];
         }
 
 

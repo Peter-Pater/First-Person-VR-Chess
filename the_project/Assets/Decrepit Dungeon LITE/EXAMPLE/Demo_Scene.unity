@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.12731749, g: 0.13414757, b: 0.1210787, a: 1}
+  m_IndirectSpecularColor: {r: 0.17276844, g: 0.21589245, b: 0.2978263, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &4
 LightmapSettings:
@@ -11207,8 +11207,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   piece_identity: 
-  x: 7
-  y: 0
+  x: 0
+  y: 7
   control_state: 0
   original_pos: {x: 0, y: 0, z: 0}
   float_pos: {x: 0, y: 0, z: 0}
@@ -22873,8 +22873,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   piece_identity: 
-  x: 5
-  y: 0
+  x: 2
+  y: 7
   control_state: 0
   original_pos: {x: 0, y: 0, z: 0}
   float_pos: {x: 0, y: 0, z: 0}
@@ -31712,8 +31712,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   piece_identity: 
-  x: 0
-  y: 1
+  x: 7
+  y: 6
   control_state: 0
   original_pos: {x: 0, y: 0, z: 0}
   float_pos: {x: 0, y: 0, z: 0}
@@ -32610,8 +32610,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   piece_identity: 
-  x: 3
-  y: 0
+  x: 4
+  y: 7
   control_state: 0
   original_pos: {x: 0, y: 0, z: 0}
   float_pos: {x: 0, y: 0, z: 0}
@@ -46440,8 +46440,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   piece_identity: 
-  x: 6
-  y: 0
+  x: 1
+  y: 7
   control_state: 0
   original_pos: {x: 0, y: 0, z: 0}
   float_pos: {x: 0, y: 0, z: 0}
@@ -46687,8 +46687,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   piece_identity: 
-  x: 2
-  y: 0
+  x: 5
+  y: 7
   control_state: 0
   original_pos: {x: 0, y: 0, z: 0}
   float_pos: {x: 0, y: 0, z: 0}
@@ -49150,8 +49150,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   piece_identity: 
-  x: 7
-  y: 1
+  x: 0
+  y: 6
   control_state: 0
   original_pos: {x: 0, y: 0, z: 0}
   float_pos: {x: 0, y: 0, z: 0}
@@ -55881,8 +55881,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   piece_identity: 
-  x: 4
-  y: 1
+  x: 3
+  y: 6
   control_state: 0
   original_pos: {x: 0, y: 0, z: 0}
   float_pos: {x: 0, y: 0, z: 0}
@@ -56510,8 +56510,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   piece_identity: 
-  x: 1
-  y: 1
+  x: 6
+  y: 6
   control_state: 0
   original_pos: {x: 0, y: 0, z: 0}
   float_pos: {x: 0, y: 0, z: 0}
@@ -66412,8 +66412,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   piece_identity: 
-  x: 0
-  y: 0
+  x: 7
+  y: 7
   control_state: 0
   original_pos: {x: 0, y: 0, z: 0}
   float_pos: {x: 0, y: 0, z: 0}
@@ -87140,8 +87140,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   piece_identity: 
-  x: 2
-  y: 1
+  x: 5
+  y: 6
   control_state: 0
   original_pos: {x: 0, y: 0, z: 0}
   float_pos: {x: 0, y: 0, z: 0}
@@ -88973,8 +88973,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   piece_identity: 
-  x: 5
-  y: 1
+  x: 2
+  y: 6
   control_state: 0
   original_pos: {x: 0, y: 0, z: 0}
   float_pos: {x: 0, y: 0, z: 0}
@@ -90358,8 +90358,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   piece_identity: 
-  x: 3
-  y: 1
+  x: 4
+  y: 6
   control_state: 0
   original_pos: {x: 0, y: 0, z: 0}
   float_pos: {x: 0, y: 0, z: 0}
@@ -120323,8 +120323,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   piece_identity: 
-  x: 4
-  y: 0
+  x: 3
+  y: 7
   control_state: 0
   original_pos: {x: 0, y: 0, z: 0}
   float_pos: {x: 0, y: 0, z: 0}
@@ -124163,8 +124163,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   piece_identity: 
-  x: 6
-  y: 1
+  x: 1
+  y: 6
   control_state: 0
   original_pos: {x: 0, y: 0, z: 0}
   float_pos: {x: 0, y: 0, z: 0}
@@ -131150,8 +131150,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   piece_identity: 
-  x: 1
-  y: 0
+  x: 6
+  y: 7
   control_state: 0
   original_pos: {x: 0, y: 0, z: 0}
   float_pos: {x: 0, y: 0, z: 0}

@@ -6,6 +6,7 @@ public class GameManager : MonoBehaviour
     AlphaBeta ab = new AlphaBeta();
     private bool _kingDead = false;
     Board_new _board;
+
 	void Start ()
     {
         _board = Board_new.Instance;
@@ -16,23 +17,23 @@ public class GameManager : MonoBehaviour
     {
         if (_kingDead)
         {
-            Debug.Log("WINNER!");
+            //Debug.Log("WINNER!");
             //UnityEditor.EditorApplication.isPlaying = false;
-            Application.Quit();
+            //Application.Quit();
         }
 
         if (!playerTurn)
         {
-            Move_new move = ab.GetMove();
+            //Move_new move = ab.GetMove();
             //Debug.Log(move.secondPosition.Position.x);
             //Debug.Log(move.secondPosition.Position.y);
-            _DoAIMove(move);
+            //_DoAIMove(move);
         }
 	}
 
     public bool playerTurn = true;
 
-    void _DoAIMove(Move_new move)
+    public void DoAIMove(Move_new move)
     {
         Tile_new firstPosition = move.firstPosition;
         Tile_new secondPosition = move.secondPosition;

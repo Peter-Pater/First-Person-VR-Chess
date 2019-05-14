@@ -11,11 +11,8 @@ public class Container : MonoBehaviour
         manager = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameManager>();
     }
 
-    void OnMouseOver()
+    public void Selected()
     {
-        if (Input.GetMouseButtonDown(0) && move != null)
-        {
-            manager.SwapPieces(move);
-        }
+        manager.SwapPieces(move);
     }
 }
