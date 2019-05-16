@@ -84,6 +84,18 @@ namespace Valve.VR.Extras
         int lightsCounter = 0;
         float lightTime;
 
+        public AudioClip kill_sound;
+
+        public GameObject text;
+        bool start = false;
+        float textTime;
+        int textCounter = 0;
+
+        string[] texts = { "Once there was a phantom", "wandering in this dungeon", "trapped in this huge chess board",
+            "he became every piece of the chess", "By being every piece of the chess", "he ...", ""};
+
+        string[] endText = new string[2];
+
         //int endGame = 0;
 
         private void Start()
@@ -92,7 +104,10 @@ namespace Valve.VR.Extras
             gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
             knight_height = GameObject.Find("knight_black").transform.position + 2.5f * Vector3.up;
 
+            text = GameObject.Find("Text");
+
             lightTime = Time.time;
+            textTime = Time.time;
 
             ab = new AlphaBeta();
 
@@ -328,40 +343,53 @@ namespace Valve.VR.Extras
             // TO DO: RECONSIDER THIS STATE
             if (stateMachine.STATE == START_GAME)
             {
-                //current_piece_script = current_piece.GetComponent<PieceBehavior>();
-                //boardManager.makeMove(current_piece_script.x, current_piece_script.y);
                 current_piece.GetComponent<MeshRenderer>().enabled = false;
                 current_piece_script = current_piece.GetComponent<PieceBehavior>();
                 player.transform.position = current_piece.transform.GetChild(0).position;
-                if (lightsCounter < 4)
-                {
-                    if (Time.time - lightTime > 1)
+                if (start == false){
+                    if (Time.time - textTime > 3)
                     {
-                        string light_name1 = "Point light " + (lightsCounter * 4).ToString();
-                        string light_name2 = "Point light " + (lightsCounter * 4 + 1).ToString();
-                        string light_name3 = "Point light " + (lightsCounter * 4 + 2).ToString();
-                        string light_name4 = "Point light " + (lightsCounter * 4 + 3).ToString();
-                        GameObject.Find(light_name1).GetComponent<AudioSource>().Play();
-                        GameObject.Find(light_name1).GetComponent<Light>().intensity = 3;
-                        GameObject.Find(light_name2).GetComponent<Light>().intensity = 3;
-                        GameObject.Find(light_name3).GetComponent<Light>().intensity = 3;
-                        GameObject.Find(light_name4).GetComponent<Light>().intensity = 3;
-
-                        if (light_name2 == "Point light 9")
+                        text.GetComponent<UnityEngine.UI.Text>().text = texts[textCounter];
+                        textCounter++;
+                        textTime = Time.time;
+                        if (textCounter > 6)
                         {
-                            GameObject.Find("fire_sound").GetComponent<AudioSource>().Play();
+                            start = true;
                         }
-                        lightTime = Time.time;
-                        lightsCounter++;
                     }
-                }
-                else
-                {
-                    // AI: SELECT THE STARTING PIECE AS KING
-                    piece_selected = GameObject.Find(current_piece_script.x.ToString() + " " + current_piece_script.y.ToString()).GetComponent<Piece_new>();
-                    piece_selected.Selected();
-                    DrawTile(1);
-                    stateMachine.STATE = PLAYER_ONE_SELECT;
+                    
+                }else{
+                    //current_piece_script = current_piece.GetComponent<PieceBehavior>();
+                    if (lightsCounter < 4)
+                    {
+                        if (Time.time - lightTime > 1)
+                        {
+                            string light_name1 = "Point light " + (lightsCounter * 4).ToString();
+                            string light_name2 = "Point light " + (lightsCounter * 4 + 1).ToString();
+                            string light_name3 = "Point light " + (lightsCounter * 4 + 2).ToString();
+                            string light_name4 = "Point light " + (lightsCounter * 4 + 3).ToString();
+                            GameObject.Find(light_name1).GetComponent<AudioSource>().Play();
+                            GameObject.Find(light_name1).GetComponent<Light>().intensity = 3;
+                            GameObject.Find(light_name2).GetComponent<Light>().intensity = 3;
+                            GameObject.Find(light_name3).GetComponent<Light>().intensity = 3;
+                            GameObject.Find(light_name4).GetComponent<Light>().intensity = 3;
+
+                            if (light_name2 == "Point light 9")
+                            {
+                                GameObject.Find("fire_sound").GetComponent<AudioSource>().Play();
+                            }
+                            lightTime = Time.time;
+                            lightsCounter++;
+                        }
+                    }
+                    else
+                    {
+                        // AI: SELECT THE STARTING PIECE AS KING
+                        piece_selected = GameObject.Find(current_piece_script.x.ToString() + " " + current_piece_script.y.ToString()).GetComponent<Piece_new>();
+                        piece_selected.Selected();
+                        DrawTile(1);
+                        stateMachine.STATE = PLAYER_ONE_SELECT;
+                    }
                 }
             }
             if (stateMachine.STATE == PLAYER_ONE_SELECT)
@@ -425,6 +453,11 @@ namespace Valve.VR.Extras
                 else
                 {
                     horse_rising = true;
+                    if (current_piece.GetComponent<AudioSource>().isPlaying)
+                    {
+                        current_piece.GetComponent<AudioSource>().Stop();
+                    }
+
                     if (stateMachine.board[current_piece_script.x, current_piece_script.y] != null)
                     {
                         killing = true;
@@ -449,6 +482,8 @@ namespace Valve.VR.Extras
                                             current_piece.GetComponent<PieceBehavior>().x,
                                             current_piece.GetComponent<PieceBehavior>().y);
 
+                            System.Random rnd = new System.Random();
+                            ab.maxDepth = rnd.Next(1, 4);
                             ai_move = ab.GetMove();
                             enemy_move[0] = (int)ai_move.firstPosition.Position.x;
                             enemy_move[1] = (int)ai_move.firstPosition.Position.y;
@@ -501,6 +536,10 @@ namespace Valve.VR.Extras
                     //boardManager.resetTiles();
                     //boardManager.makeMove(current_piece_script.x, current_piece_script.y);
                     horse_rising = true;
+                    if (enemypiece.GetComponent<AudioSource>().isPlaying)
+                    {
+                        enemypiece.GetComponent<AudioSource>().Stop();
+                    }
 
                     if (stateMachine.board[enemy_move[2], enemy_move[3]] != null)
                     {
@@ -525,7 +564,37 @@ namespace Valve.VR.Extras
             }
             if (stateMachine.STATE == END_GAME)
             {
+                if (lightsCounter > 0)
+                {
+                    if (Time.time - textTime > 1)
+                    {
+                        lightsCounter--;
+                        string light_name1 = "Point light " + (lightsCounter * 4).ToString();
+                        string light_name2 = "Point light " + (lightsCounter * 4 + 1).ToString();
+                        string light_name3 = "Point light " + (lightsCounter * 4 + 2).ToString();
+                        string light_name4 = "Point light " + (lightsCounter * 4 + 3).ToString();
+                        GameObject.Find(light_name1).GetComponent<AudioSource>().Play();
+                        GameObject.Find(light_name1).GetComponent<Light>().intensity = 0;
+                        GameObject.Find(light_name2).GetComponent<Light>().intensity = 0;
+                        GameObject.Find(light_name3).GetComponent<Light>().intensity = 0;
+                        GameObject.Find(light_name4).GetComponent<Light>().intensity = 0;
 
+                        if (light_name2 == "Point light 9")
+                        {
+                            GameObject.Find("fire_sound").GetComponent<AudioSource>().Stop();
+                        }
+                        textTime = Time.time;
+                    }
+                }
+                else
+                {
+                    if (Time.time - textTime > 3 && textCounter < 2)
+                    {
+                        text.GetComponent<UnityEngine.UI.Text>().text = endText[textCounter];
+                        textCounter++;
+                        textTime = Time.time;
+                    }
+                }
             }
         }
 
@@ -587,6 +656,10 @@ namespace Valve.VR.Extras
                     stateMachine.STATE = END_GAME;
                     Destroy(killed_piece);
                     Debug.Log("You lose");
+                    endText[0] = "He still lost...";
+                    endText[1] = "and had to spend another hundred years in the dungeon";
+                    textCounter = 0;
+                    textTime = Time.time;
                     return;
                 }
                 else if (killed_piece.name == "king_black")
@@ -594,6 +667,10 @@ namespace Valve.VR.Extras
                     stateMachine.STATE = END_GAME;
                     Destroy(killed_piece);
                     Debug.Log("You won!");
+                    endText[0] = "He won..";
+                    endText[1] = "and out he went";
+                    textTime = Time.time;
+                    textCounter = 0;
                     return;
                 }
                 else
@@ -626,7 +703,7 @@ namespace Valve.VR.Extras
                 //Debug.Log(Time.time - killTime);
                 if (current_piece == killed_piece)
                 {
-                    Debug.Log(killingMove);
+                    //Debug.Log(killingMove);
                     
                     if (Time.time - killTime < 2.5)
                     {
@@ -634,11 +711,16 @@ namespace Valve.VR.Extras
                         player.transform.position -= killingMove * 0.08f;
                     }
 
-
                     ParticleSystem system = player.GetComponentInChildren<ParticleSystem>();
                     if (!system.isPlaying)
                     {
                         system.Play();
+                    }
+
+                    current_piece.GetComponent<AudioSource>().clip = kill_sound;
+                    if (!current_piece.GetComponent<AudioSource>().isPlaying)
+                    {
+                        current_piece.GetComponent<AudioSource>().Play();
                     }
                 }
                 else

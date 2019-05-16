@@ -5,9 +5,12 @@ using UnityEngine;
 public class PieceBehavior : MonoBehaviour
 {
     // Start is called before the first frame update
-    public string piece_identity;
+    public int piece_identity = 1;
     public int x;
     public int y;
+
+    public AudioClip kill_sound;
+    AudioSource myAudio;
 
     // control states
     const int POINTER_IN = 1;
@@ -38,19 +41,24 @@ public class PieceBehavior : MonoBehaviour
 
     void Start()
     {
-        control_state = POINTER_OUT;
-        original_pos = this.transform.position;
-        float_pos = this.transform.position + Vector3.up / 5;
+        myAudio = this.GetComponent<AudioSource>();
+        if (piece_identity == 1)
+        {
+            control_state = POINTER_OUT;
+            original_pos = this.transform.position;
+            float_pos = this.transform.position + Vector3.up / 5;
 
-        stateMachine = GameObject.Find("Player").GetComponent<StateMachine>();
-
-        //boardManager = GameObject.Find("ChessManager").GetComponent<BoardManager>();
+            stateMachine = GameObject.Find("Player").GetComponent<StateMachine>();
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        laser_hover();
+        if (piece_identity == 1)
+        {
+            laser_hover();
+        }
     }
 
     void laser_hover()
@@ -95,6 +103,11 @@ public class PieceBehavior : MonoBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
+        if (!myAudio.isPlaying)
+        {
+            myAudio.clip = kill_sound;
+            myAudio.Play();
+        }
         Debug.Log("Collide!");
     }
 
