@@ -5,7 +5,7 @@
       "app_key": "application.generated.unity.the_project.exe",
       "launch_type": "url",
       "url": "steam://launch/",
-      "action_manifest_path": "D:\\Xincheng-Capstone\\First-Person-VR-Chess\\the_project\\actions.json",
+      "action_manifest_path": "D:\\First-Person-VR-Chess\\the_project\\actions.json",
       "strings": {
         "en_us": {
           "name": "the_project [Testing]"

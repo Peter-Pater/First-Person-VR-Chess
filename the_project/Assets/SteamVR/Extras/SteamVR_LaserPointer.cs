@@ -70,12 +70,21 @@ namespace Valve.VR.Extras
         Move_new ai_move;
         Move_new current_move;
 
+        bool killing = false;
+        float killTime;
+
+        Vector3 killingMove;
+        Vector3 knight_height;
+        bool horse_rising = true;
+
         //int endGame = 0;
 
         private void Start()
         {
             //boardManager = GameObject.Find("ChessManager").GetComponent<BoardManager>();
             gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+            knight_height = GameObject.Find("knight_black").transform.position + 2.5f * Vector3.up;
+
             ab = new AlphaBeta();
 
             if (pose == null)
@@ -284,6 +293,10 @@ namespace Valve.VR.Extras
                                 // update board information here
                                 current_piece.GetComponent<PieceBehavior>().x = (int) move.secondPosition.Position.x;
                                 current_piece.GetComponent<PieceBehavior>().y = (int) move.secondPosition.Position.y;
+                                if (stateMachine.board[current_piece_script.x, current_piece_script.y] != null) {
+                                    stateMachine.board[current_piece_script.x, current_piece_script.y].GetComponent<Rigidbody>().isKinematic = false;
+                                    stateMachine.board[current_piece_script.x, current_piece_script.y].GetComponent<Rigidbody>().useGravity = false;
+                                }
                                 stateMachine.STATE = PLAYER_ONE_TRANSPERSPECTIVE_1;
                                 current_move = move;
                                 break;
@@ -312,14 +325,14 @@ namespace Valve.VR.Extras
             }
             if (stateMachine.STATE == PLAYER_ONE_SELECT)
             {
-                player.transform.position = current_piece.transform.position + Vector3.up;
+                player.transform.position = current_piece.transform.GetChild(0).position;
             }
             if (stateMachine.STATE == PLAYER_ONE_TRANSPERSPECTIVE)
             {
-                if (player.transform.position != target_piece.transform.position + Vector3.up)
+                if (player.transform.position != target_piece.transform.GetChild(0).position)
                 {
                     //player.transform.position = Vector3.MoveTowards(player.transform.position, target_piece.transform.position + Vector3.up, transperspective_speed * Time.deltaTime);
-                    player.transform.position = target_piece.transform.position + Vector3.up;
+                    player.transform.position = target_piece.transform.GetChild(0).position;
                 }
                 else
                 {
@@ -360,58 +373,89 @@ namespace Valve.VR.Extras
                     current_piece.transform.position = Vector3.MoveTowards(current_piece.transform.position,
                                                                 target_pos_2,
                                                                 transperspective_speed * Time.deltaTime);
+                    killTime = Time.time;
                 }
                 else
                 {
-                    DrawTile(0);
-                    stateMachine.STATE = OPPONENT_MOVES;
-                    //boardManager.makeMove(current_piece_script.x, current_piece_script.y);
-                    Container container_script = GameObject.Find(current_piece_script.x.ToString() + current_piece_script.y.ToString()).GetComponent<Container>();
-                    container_script.Selected();
-
                     if (stateMachine.board[current_piece_script.x, current_piece_script.y] != null)
                     {
+                        killing = true;
                         kill(stateMachine.board[current_piece_script.x, current_piece_script.y], true);
                     }
 
-                    update_board((int)current_move.firstPosition.Position.x,
-                                    (int)current_move.firstPosition.Position.y,
-                                    current_piece.GetComponent<PieceBehavior>().x,
-                                    current_piece.GetComponent<PieceBehavior>().y);
-
-                    // AI: AI move
-                    //enemy_move = boardManager.decideAndMoveEnemyPiece();\
-                    if (stateMachine.STATE != END_GAME)
+                    if (!killing)
                     {
-                        ai_move = ab.GetMove();
-                        enemy_move[0] = (int)ai_move.firstPosition.Position.x;
-                        enemy_move[1] = (int)ai_move.firstPosition.Position.y;
-                        enemy_move[2] = (int)ai_move.secondPosition.Position.x;
-                        enemy_move[3] = (int)ai_move.secondPosition.Position.y;
-                        gameManager.DoAIMove(ai_move);
+                        DrawTile(0);
+
+                        // AI: AI move
+                        //enemy_move = boardManager.decideAndMoveEnemyPiece();\
+                        if (stateMachine.STATE != END_GAME)
+                        {
+                            stateMachine.STATE = OPPONENT_MOVES;
+                            //boardManager.makeMove(current_piece_script.x, current_piece_script.y);
+                            Container container_script = GameObject.Find(current_piece_script.x.ToString() + current_piece_script.y.ToString()).GetComponent<Container>();
+                            container_script.Selected();
+
+                            update_board((int)current_move.firstPosition.Position.x,
+                                            (int)current_move.firstPosition.Position.y,
+                                            current_piece.GetComponent<PieceBehavior>().x,
+                                            current_piece.GetComponent<PieceBehavior>().y);
+
+                            ai_move = ab.GetMove();
+                            enemy_move[0] = (int)ai_move.firstPosition.Position.x;
+                            enemy_move[1] = (int)ai_move.firstPosition.Position.y;
+                            enemy_move[2] = (int)ai_move.secondPosition.Position.x;
+                            enemy_move[3] = (int)ai_move.secondPosition.Position.y;
+                            if (stateMachine.board[enemy_move[2], enemy_move[3]] != null && stateMachine.board[enemy_move[2], enemy_move[3]] != current_piece)
+                            {
+                                stateMachine.board[enemy_move[2], enemy_move[3]].GetComponent<Rigidbody>().isKinematic = false;
+                                stateMachine.board[enemy_move[2], enemy_move[3]].GetComponent<Rigidbody>().useGravity = false;
+                            }
+                            gameManager.DoAIMove(ai_move);
+
+                            enemypiece = stateMachine.board[enemy_move[0], enemy_move[1]];
+                            enemy_target_tile = GameObject.Find(GetTileName(enemy_move[2], enemy_move[3]));
+
+                            enemy_target_pos = new Vector3(enemy_target_tile.transform.position.x,
+                                                            enemypiece.transform.position.y,
+                                                            enemy_target_tile.transform.position.z);
+                            killingMove = enemypiece.transform.position - enemy_target_pos;
+                            killingMove.Normalize();
+                        }
                     }
                 }
             }
             if (stateMachine.STATE == OPPONENT_MOVES)
             {
-                enemypiece = stateMachine.board[enemy_move[0], enemy_move[1]];
-                enemy_target_tile = GameObject.Find(GetTileName(enemy_move[2], enemy_move[3]));
-
-                enemy_target_pos = new Vector3(enemy_target_tile.transform.position.x,
-                                                enemypiece.transform.position.y,
-                                                enemy_target_tile.transform.position.z);
+                
                 if (enemypiece.transform.position != enemy_target_pos)
                 {
                     enemypiece.transform.position = Vector3.MoveTowards(enemypiece.transform.position, enemy_target_pos, transperspective_speed * Time.deltaTime);
+
+                    if (enemypiece.name == "knight_black" || enemypiece.name == "knight_black 1")
+                    {
+                        if (horse_rising)
+                        {
+                            if (enemypiece.transform.position.y > knight_height.y)
+                            {
+                                horse_rising = false;
+                            }
+                            enemypiece.transform.position += 0.2f * Vector3.up;
+                        }
+                        
+                    }
+                    killTime = Time.time;
                 }
                 else
                 {
                     //Debug.Log("Enemy move completes!");
                     //boardManager.resetTiles();
                     //boardManager.makeMove(current_piece_script.x, current_piece_script.y);
+                    horse_rising = true;
 
                     if (stateMachine.board[enemy_move[2], enemy_move[3]] != null)
                     {
+                        killing = true;
                         kill(stateMachine.board[enemy_move[2], enemy_move[3]], false);
                     }
                     else
@@ -420,10 +464,14 @@ namespace Valve.VR.Extras
                         piece_selected.gameObject.name = current_piece_script.x.ToString() + " " + current_piece_script.y.ToString();
                         piece_selected.Selected();
                     }
-                    update_board((int)ai_move.firstPosition.Position.x, (int)ai_move.firstPosition.Position.y,
+
+                    if (!killing && stateMachine.STATE != END_GAME)
+                    {
+                        update_board((int)ai_move.firstPosition.Position.x, (int)ai_move.firstPosition.Position.y,
                                     (int)ai_move.secondPosition.Position.x, (int)ai_move.secondPosition.Position.y);
-                    stateMachine.STATE = PLAYER_ONE_SELECT;
-                    DrawTile(1);
+                        stateMachine.STATE = PLAYER_ONE_SELECT;
+                        DrawTile(1);
+                    }
                 }
             }
             if (stateMachine.STATE == END_GAME)
@@ -480,39 +528,68 @@ namespace Valve.VR.Extras
 
         public void kill(GameObject killed_piece, bool is_enemy)
         {
-            if (killed_piece.name == "king_white")
+            if (Time.time - killTime > 3)
             {
-                stateMachine.STATE = END_GAME;
-                Destroy(killed_piece);
-                Debug.Log("You lose");
-                return;
-            }
-            else if (killed_piece.name == "king_black")
-            {
-                stateMachine.STATE = END_GAME;
-                Destroy(killed_piece);
-                Debug.Log("You won!");
-                return;
-            }
-            if (is_enemy) {
-                Destroy(killed_piece);
-            }
-            else
-            {
-                if (killed_piece == current_piece)
+                killing = false;
+                Debug.Log("killed");
+
+                if (killed_piece.name == "king_white")
                 {
-                    current_piece = GameObject.Find("king_white");
-                    current_piece.GetComponent<MeshRenderer>().enabled = false;
-                    current_piece_script = current_piece.GetComponent<PieceBehavior>();
-                    piece_selected = GameObject.Find(current_piece_script.x.ToString() + " " + current_piece_script.y.ToString()).GetComponent<Piece_new>();
-                    piece_selected.Selected();
+                    stateMachine.STATE = END_GAME;
+                    Destroy(killed_piece);
+                    Debug.Log("You lose");
+                    return;
+                }
+                else if (killed_piece.name == "king_black")
+                {
+                    stateMachine.STATE = END_GAME;
+                    Destroy(killed_piece);
+                    Debug.Log("You won!");
+                    return;
                 }
                 else
                 {
-                    piece_selected.gameObject.name = current_piece_script.x.ToString() + " " + current_piece_script.y.ToString();
-                    piece_selected.Selected();
+                    if (is_enemy)
+                    {
+                        Destroy(killed_piece);
+                    }
+                    else
+                    {
+                        if (killed_piece == current_piece)
+                        {
+                            current_piece = GameObject.Find("king_white");
+                            current_piece.GetComponent<MeshRenderer>().enabled = false;
+                            current_piece_script = current_piece.GetComponent<PieceBehavior>();
+                            piece_selected = GameObject.Find(current_piece_script.x.ToString() + " " + current_piece_script.y.ToString()).GetComponent<Piece_new>();
+                            piece_selected.Selected();
+                        }
+                        else
+                        {
+                            piece_selected.gameObject.name = current_piece_script.x.ToString() + " " + current_piece_script.y.ToString();
+                            piece_selected.Selected();
+                        }
+                        Destroy(killed_piece);
+                    }
                 }
-                Destroy(killed_piece);
+            }
+            else
+            {
+                //Debug.Log(Time.time - killTime);
+                if (current_piece == killed_piece)
+                {
+                    Debug.Log(killingMove);
+                    player.transform.position -= killingMove * 0.1f;
+                    if (Time.time - killTime < 1.5)
+                    {
+                        player.transform.position += Vector3.up * 0.03f;
+                    }
+
+                    if (Time.time - killTime > 1.5)
+                    {
+                        player.transform.position -= Vector3.up * 0.03f;
+                    }
+
+                }
             }
         }
     }
