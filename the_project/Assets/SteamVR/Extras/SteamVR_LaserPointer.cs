@@ -77,6 +77,13 @@ namespace Valve.VR.Extras
         Vector3 knight_height;
         bool horse_rising = true;
 
+        Vector3 target_pos_1;
+        Vector3 target_pos_2;
+
+        // start game variables
+        int lightsCounter = 0;
+        float lightTime;
+
         //int endGame = 0;
 
         private void Start()
@@ -84,6 +91,8 @@ namespace Valve.VR.Extras
             //boardManager = GameObject.Find("ChessManager").GetComponent<BoardManager>();
             gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
             knight_height = GameObject.Find("knight_black").transform.position + 2.5f * Vector3.up;
+
+            lightTime = Time.time;
 
             ab = new AlphaBeta();
 
@@ -298,6 +307,13 @@ namespace Valve.VR.Extras
                                     stateMachine.board[current_piece_script.x, current_piece_script.y].GetComponent<Rigidbody>().useGravity = false;
                                 }
                                 stateMachine.STATE = PLAYER_ONE_TRANSPERSPECTIVE_1;
+                                target_pos_1 = new Vector3(target_tile.transform.position.x,
+                                                player.transform.position.y,
+                                                    target_tile.transform.position.z);
+                                target_pos_2 = new Vector3(target_tile.transform.position.x,
+                                                                current_piece.transform.position.y,
+                                                                    target_tile.transform.position.z);
+                                current_piece.GetComponent<AudioSource>().Play();
                                 current_move = move;
                                 break;
                             }
@@ -314,14 +330,39 @@ namespace Valve.VR.Extras
             {
                 //current_piece_script = current_piece.GetComponent<PieceBehavior>();
                 //boardManager.makeMove(current_piece_script.x, current_piece_script.y);
-
-                // AI: SELECT THE STARTING PIECE AS KING
                 current_piece.GetComponent<MeshRenderer>().enabled = false;
                 current_piece_script = current_piece.GetComponent<PieceBehavior>();
-                piece_selected = GameObject.Find(current_piece_script.x.ToString() + " " + current_piece_script.y.ToString()).GetComponent<Piece_new>();
-                piece_selected.Selected();
-                DrawTile(1);
-                stateMachine.STATE = PLAYER_ONE_SELECT;
+                player.transform.position = current_piece.transform.GetChild(0).position;
+                if (lightsCounter < 4)
+                {
+                    if (Time.time - lightTime > 1)
+                    {
+                        string light_name1 = "Point light " + (lightsCounter * 4).ToString();
+                        string light_name2 = "Point light " + (lightsCounter * 4 + 1).ToString();
+                        string light_name3 = "Point light " + (lightsCounter * 4 + 2).ToString();
+                        string light_name4 = "Point light " + (lightsCounter * 4 + 3).ToString();
+                        GameObject.Find(light_name1).GetComponent<AudioSource>().Play();
+                        GameObject.Find(light_name1).GetComponent<Light>().intensity = 3;
+                        GameObject.Find(light_name2).GetComponent<Light>().intensity = 3;
+                        GameObject.Find(light_name3).GetComponent<Light>().intensity = 3;
+                        GameObject.Find(light_name4).GetComponent<Light>().intensity = 3;
+
+                        if (light_name2 == "Point light 9")
+                        {
+                            GameObject.Find("fire_sound").GetComponent<AudioSource>().Play();
+                        }
+                        lightTime = Time.time;
+                        lightsCounter++;
+                    }
+                }
+                else
+                {
+                    // AI: SELECT THE STARTING PIECE AS KING
+                    piece_selected = GameObject.Find(current_piece_script.x.ToString() + " " + current_piece_script.y.ToString()).GetComponent<Piece_new>();
+                    piece_selected.Selected();
+                    DrawTile(1);
+                    stateMachine.STATE = PLAYER_ONE_SELECT;
+                }
             }
             if (stateMachine.STATE == PLAYER_ONE_SELECT)
             {
@@ -357,12 +398,6 @@ namespace Valve.VR.Extras
             }
             if (stateMachine.STATE == PLAYER_ONE_TRANSPERSPECTIVE_1)
             {
-                Vector3 target_pos_1 = new Vector3(target_tile.transform.position.x,
-                                                player.transform.position.y,
-                                                    target_tile.transform.position.z);
-                Vector3 target_pos_2 = new Vector3(target_tile.transform.position.x,
-                                                current_piece.transform.position.y,
-                                                    target_tile.transform.position.z);
                 current_piece.GetComponent<PieceBehavior>().original_pos = target_pos_2;
                 current_piece.GetComponent<PieceBehavior>().float_pos = current_piece.GetComponent<PieceBehavior>().original_pos + Vector3.up / 5;
                 if (player.transform.position != target_pos_1 || current_piece.transform.position != target_pos_2)
@@ -373,10 +408,23 @@ namespace Valve.VR.Extras
                     current_piece.transform.position = Vector3.MoveTowards(current_piece.transform.position,
                                                                 target_pos_2,
                                                                 transperspective_speed * Time.deltaTime);
+                    if (current_piece.name == "knight_white" || current_piece.name == "knight_white 1")
+                    {
+                        if (horse_rising)
+                        {
+                            if (player.transform.position.y > knight_height.y)
+                            {
+                                horse_rising = false;
+                            }
+                            current_piece.transform.position += 0.1f * Vector3.up;
+                            player.transform.position += 0.1f * Vector3.up;
+                        }
+                    }
                     killTime = Time.time;
                 }
                 else
                 {
+                    horse_rising = true;
                     if (stateMachine.board[current_piece_script.x, current_piece_script.y] != null)
                     {
                         killing = true;
@@ -421,6 +469,7 @@ namespace Valve.VR.Extras
                                                             enemy_target_tile.transform.position.z);
                             killingMove = enemypiece.transform.position - enemy_target_pos;
                             killingMove.Normalize();
+                            enemypiece.GetComponent<AudioSource>().Play();
                         }
                     }
                 }
@@ -503,7 +552,7 @@ namespace Valve.VR.Extras
             foreach(Move_new move in piece_selected.moves)
             {
                 string tileName = GetTileName((int) move.secondPosition.Position.x, (int) move.secondPosition.Position.y);
-                Debug.Log("Possible move: " + tileName);
+                //Debug.Log("Possible move: " + tileName);
 
                 GameObject current_tile = GameObject.Find(tileName);
                 MaterialControl current_matcontrol = current_tile.GetComponent<MaterialControl>();
@@ -528,10 +577,10 @@ namespace Valve.VR.Extras
 
         public void kill(GameObject killed_piece, bool is_enemy)
         {
-            if (Time.time - killTime > 3)
+            if (Time.time - killTime > 4)
             {
                 killing = false;
-                Debug.Log("killed");
+                //Debug.Log("killed");
 
                 if (killed_piece.name == "king_white")
                 {
@@ -578,17 +627,31 @@ namespace Valve.VR.Extras
                 if (current_piece == killed_piece)
                 {
                     Debug.Log(killingMove);
-                    player.transform.position -= killingMove * 0.1f;
-                    if (Time.time - killTime < 1.5)
+                    
+                    if (Time.time - killTime < 2.5)
                     {
-                        player.transform.position += Vector3.up * 0.03f;
+                        player.transform.position += Vector3.up * 0.01f;
+                        player.transform.position -= killingMove * 0.08f;
                     }
 
-                    if (Time.time - killTime > 1.5)
-                    {
-                        player.transform.position -= Vector3.up * 0.03f;
-                    }
 
+                    ParticleSystem system = player.GetComponentInChildren<ParticleSystem>();
+                    if (!system.isPlaying)
+                    {
+                        system.Play();
+                    }
+                }
+                else
+                {
+                    ParticleSystem system = killed_piece.GetComponent<ParticleSystem>();
+                    if (!system.isPlaying)
+                    {
+                        system.Play();
+                    }
+                    if (Time.time - killTime > 2)
+                    {
+                        killed_piece.GetComponent<MeshRenderer>().enabled = false;
+                    }
                 }
             }
         }

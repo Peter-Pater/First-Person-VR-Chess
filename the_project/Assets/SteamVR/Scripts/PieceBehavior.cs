@@ -93,4 +93,9 @@ public class PieceBehavior : MonoBehaviour
         
     }
 
+    void OnCollisionEnter(Collision collision)
+    {
+        Debug.Log("Collide!");
+    }
+
 }
