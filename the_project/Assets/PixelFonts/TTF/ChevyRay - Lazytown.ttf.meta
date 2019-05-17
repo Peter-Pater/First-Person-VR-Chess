@@ -1,0 +1,23 @@
+fileFormatVersion: 2
+guid: ff6947b9d9a6747e6a6f247c826f0925
+timeCreated: 1523645979
+licenseType: Store
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: ChevyRay - Lazytown
+  fontNames:
+  - ChevyRay - Lazytown
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

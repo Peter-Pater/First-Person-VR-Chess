@@ -1,0 +1,23 @@
+fileFormatVersion: 2
+guid: 2c44a5840da5f4331a3c7c0609e7ad5f
+timeCreated: 1523645978
+licenseType: Store
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: ChevyRay - Slapface
+  fontNames:
+  - ChevyRay - Slapface
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

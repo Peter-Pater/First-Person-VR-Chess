@@ -1,0 +1,23 @@
+fileFormatVersion: 2
+guid: 3b1e16f1da1944673ae7c0d79e802268
+timeCreated: 1523645978
+licenseType: Store
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: ChevyRay - Thinstix
+  fontNames:
+  - ChevyRay - Thinstix
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

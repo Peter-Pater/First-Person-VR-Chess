@@ -1,0 +1,23 @@
+fileFormatVersion: 2
+guid: e9d1c63f64ba74e17b87f4606c15894f
+timeCreated: 1523645979
+licenseType: Store
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: ChevyRay - Softsquare Mono
+  fontNames:
+  - ChevyRay - Softsquare Mono
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -25,6 +25,8 @@ namespace Valve.VR.Extras
         public event PointerEventHandler PointerClick;
 
         Transform previousContact = null;
+        
+        public Font gameFonts;
 
         // player movement speed
         public float transperspective_speed = 6;
@@ -85,14 +87,19 @@ namespace Valve.VR.Extras
         float lightTime;
 
         public AudioClip kill_sound;
+        public AudioClip horse_sound;
 
         public GameObject text;
         bool start = false;
         float textTime;
         int textCounter = 0;
 
-        string[] texts = { "Once there was a phantom", "wandering in this dungeon", "trapped in this huge chess board",
-            "he became every piece of the chess", "By being every piece of the chess", "he ...", ""};
+        //string instruction = "Instruction: in this game you will play chess from a first person perspective view. You will start as the king, " +
+        //    "and then you can switch between pieces as you wish. The possible moves will be highlighted as green and red," +
+        //    " make your move or switch between pieces with the laser beam";
+
+        string[] texts = { "PEOPLE KMOW THAT", "\"YOU KNOW WHO\" HAS 7 DEATHLY HALLOWS AND 8 SOULS", "WHAT PEOPLE DON'T KNOW IS",
+            "THERE HAS ALWAYS BEEN ONE MORE AT LARGE", "AND HERE I AM", "TRAPPED IN THIS CHESS GAME FOR 50 YEARS", "TODAY I COME BACK TO POWER", "AND YOU ARE NO ONE TO STOP ME!", ""};
 
         string[] endText = new string[2];
 
@@ -346,49 +353,58 @@ namespace Valve.VR.Extras
                 current_piece.GetComponent<MeshRenderer>().enabled = false;
                 current_piece_script = current_piece.GetComponent<PieceBehavior>();
                 player.transform.position = current_piece.transform.GetChild(0).position;
-                if (start == false){
-                    if (Time.time - textTime > 3)
+                if (Time.time > 10)
+                {
+                    text.GetComponent<UnityEngine.UI.Text>().font = gameFonts;
+                    text.GetComponent<UnityEngine.UI.Text>().fontSize = 25;
+                    text.GetComponent<UnityEngine.UI.Text>().color = clickColor;
+                    if (start == false)
                     {
-                        text.GetComponent<UnityEngine.UI.Text>().text = texts[textCounter];
-                        textCounter++;
-                        textTime = Time.time;
-                        if (textCounter > 6)
+                        if (Time.time - textTime > 4)
                         {
-                            start = true;
-                        }
-                    }
-                    
-                }else{
-                    //current_piece_script = current_piece.GetComponent<PieceBehavior>();
-                    if (lightsCounter < 4)
-                    {
-                        if (Time.time - lightTime > 1)
-                        {
-                            string light_name1 = "Point light " + (lightsCounter * 4).ToString();
-                            string light_name2 = "Point light " + (lightsCounter * 4 + 1).ToString();
-                            string light_name3 = "Point light " + (lightsCounter * 4 + 2).ToString();
-                            string light_name4 = "Point light " + (lightsCounter * 4 + 3).ToString();
-                            GameObject.Find(light_name1).GetComponent<AudioSource>().Play();
-                            GameObject.Find(light_name1).GetComponent<Light>().intensity = 3;
-                            GameObject.Find(light_name2).GetComponent<Light>().intensity = 3;
-                            GameObject.Find(light_name3).GetComponent<Light>().intensity = 3;
-                            GameObject.Find(light_name4).GetComponent<Light>().intensity = 3;
-
-                            if (light_name2 == "Point light 9")
+                            text.GetComponent<UnityEngine.UI.Text>().text = texts[textCounter];
+                            textCounter++;
+                            textTime = Time.time;
+                            if (textCounter > 8)
                             {
-                                GameObject.Find("fire_sound").GetComponent<AudioSource>().Play();
+                                start = true;
                             }
-                            lightTime = Time.time;
-                            lightsCounter++;
                         }
+
                     }
                     else
                     {
-                        // AI: SELECT THE STARTING PIECE AS KING
-                        piece_selected = GameObject.Find(current_piece_script.x.ToString() + " " + current_piece_script.y.ToString()).GetComponent<Piece_new>();
-                        piece_selected.Selected();
-                        DrawTile(1);
-                        stateMachine.STATE = PLAYER_ONE_SELECT;
+                        //current_piece_script = current_piece.GetComponent<PieceBehavior>();
+                        if (lightsCounter < 4)
+                        {
+                            if (Time.time - lightTime > 1)
+                            {
+                                string light_name1 = "Point light " + (lightsCounter * 4).ToString();
+                                string light_name2 = "Point light " + (lightsCounter * 4 + 1).ToString();
+                                string light_name3 = "Point light " + (lightsCounter * 4 + 2).ToString();
+                                string light_name4 = "Point light " + (lightsCounter * 4 + 3).ToString();
+                                GameObject.Find(light_name1).GetComponent<AudioSource>().Play();
+                                GameObject.Find(light_name1).GetComponent<Light>().intensity = 3;
+                                GameObject.Find(light_name2).GetComponent<Light>().intensity = 3;
+                                GameObject.Find(light_name3).GetComponent<Light>().intensity = 3;
+                                GameObject.Find(light_name4).GetComponent<Light>().intensity = 3;
+
+                                if (light_name2 == "Point light 9")
+                                {
+                                    GameObject.Find("fire_sound").GetComponent<AudioSource>().Play();
+                                }
+                                lightTime = Time.time;
+                                lightsCounter++;
+                            }
+                        }
+                        else
+                        {
+                            // AI: SELECT THE STARTING PIECE AS KING
+                            piece_selected = GameObject.Find(current_piece_script.x.ToString() + " " + current_piece_script.y.ToString()).GetComponent<Piece_new>();
+                            piece_selected.Selected();
+                            DrawTile(1);
+                            stateMachine.STATE = PLAYER_ONE_SELECT;
+                        }
                     }
                 }
             }
@@ -447,6 +463,7 @@ namespace Valve.VR.Extras
                             current_piece.transform.position += 0.1f * Vector3.up;
                             player.transform.position += 0.1f * Vector3.up;
                         }
+                        current_piece.GetComponent<AudioSource>().clip = horse_sound;
                     }
                     killTime = Time.time;
                 }
@@ -526,7 +543,7 @@ namespace Valve.VR.Extras
                             }
                             enemypiece.transform.position += 0.2f * Vector3.up;
                         }
-                        
+                        enemypiece.GetComponent<AudioSource>().clip = horse_sound;
                     }
                     killTime = Time.time;
                 }
@@ -588,7 +605,7 @@ namespace Valve.VR.Extras
                 }
                 else
                 {
-                    if (Time.time - textTime > 3 && textCounter < 2)
+                    if (Time.time - textTime > 4 && textCounter < 2)
                     {
                         text.GetComponent<UnityEngine.UI.Text>().text = endText[textCounter];
                         textCounter++;
@@ -656,8 +673,8 @@ namespace Valve.VR.Extras
                     stateMachine.STATE = END_GAME;
                     Destroy(killed_piece);
                     Debug.Log("You lose");
-                    endText[0] = "He still lost...";
-                    endText[1] = "and had to spend another hundred years in the dungeon";
+                    endText[0] = "YOU LOST AND NOW IT IS YOUR TURN";
+                    endText[1] = "TO BE TRAPPED HERE, IN THIS DARK DARK DUNGEON";
                     textCounter = 0;
                     textTime = Time.time;
                     return;
@@ -667,8 +684,8 @@ namespace Valve.VR.Extras
                     stateMachine.STATE = END_GAME;
                     Destroy(killed_piece);
                     Debug.Log("You won!");
-                    endText[0] = "He won..";
-                    endText[1] = "and out he went";
+                    endText[0] = "AHHH... I DON'T BELIEVE THIS!";
+                    endText[1] = "THIS SHOULD NOT BE THE END OF VOLDEMORT!";
                     textTime = Time.time;
                     textCounter = 0;
                     return;
