@@ -98,7 +98,7 @@ namespace Valve.VR.Extras
         //    "and then you can switch between pieces as you wish. The possible moves will be highlighted as green and red," +
         //    " make your move or switch between pieces with the laser beam";
 
-        string[] texts = { "PEOPLE KMOW THAT", "\"YOU KNOW WHO\" HAS 7 DEATHLY HALLOWS AND 8 SOULS", "WHAT PEOPLE DON'T KNOW IS",
+        string[] texts = { "PEOPLE KNOW THAT", "\"YOU KNOW WHO\" HAS 7 DEATHLY HALLOWS AND 8 SOULS", "WHAT PEOPLE DON'T KNOW IS",
             "THERE HAS ALWAYS BEEN ONE MORE AT LARGE", "AND HERE I AM", "TRAPPED IN THIS CHESS GAME FOR 50 YEARS", "TODAY I COME BACK TO POWER", "AND YOU ARE NO ONE TO STOP ME!", ""};
 
         string[] endText = new string[2];
